@@ -21,8 +21,17 @@
 	</properties>
 	<dependencies>
 		<dependency>
+			<groupId>org.system</groupId>
+			<artifactId>system-service-impl</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 		<!-- alibaba的druid数据库连接池 -->
 		<dependency>

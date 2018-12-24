@@ -1,3 +1,22 @@
 spring:
   profiles: 
     active: dev
+  resources:
+    static-locations: classpath:/static/
+  thymeleaf:
+    # 开发时关闭缓存,不然没法看到实时页面
+    cache: false
+    #检查模板位置是否正确(默认值:true)
+    check-template-location: true
+    #在构建URL时添加到视图名称前的前缀（默认值：classpath:/templates/）
+    prefix: classpath:/templates/
+    #在构建URL时添加到视图名称后的后缀（默认值：.html）
+    suffix: .html
+    #Content-Type的值（默认值：text/html）
+    content-type: text/html
+    #要运用于模板之上的模板模式。另见StandardTemplate-ModeHandlers(默认值：HTML5)
+    model: HTML5
+    #开启MVC Thymeleaf视图解析(默认值：true)
+    enabled: true
+    #模板编码
+    encoding: UTF-8

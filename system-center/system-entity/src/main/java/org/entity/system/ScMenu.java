@@ -1,5 +1,7 @@
 package org.entity.system;
 
+import java.util.List;
+
 import org.zero.spring.mybatis.BaseEntity;
 
 /**
@@ -33,6 +35,21 @@ public class ScMenu extends BaseEntity {
 	 */
 	private Integer sort;
 
+	/**
+	 * 状态
+	 */
+	private String status;
+
+	private List<ScMenu> children;
+
+	public List<ScMenu> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<ScMenu> children) {
+		this.children = children;
+	}
+
 	public String getParentCode() {
 		return parentCode;
 	}
@@ -63,6 +80,14 @@ public class ScMenu extends BaseEntity {
 
 	public void setSort(Integer sort) {
 		this.sort = sort;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

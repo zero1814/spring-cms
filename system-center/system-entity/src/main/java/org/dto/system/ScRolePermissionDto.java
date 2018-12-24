@@ -13,4 +13,30 @@ public class ScRolePermissionDto extends BaseDto {
 
 	private static final long serialVersionUID = 2545902924884945504L;
 
+	/**
+	 * 角色编码
+	 */
+	private String roleCode;
+
+	/**
+	 * 权限编码
+	 */
+	private String permissionCode;
+
+	public String getRoleCode() {
+		return roleCode;
+	}
+
+	public void setRoleCode(String roleCode) {
+		this.roleCode = roleCode;
+	}
+
+	public String getPermissionCode() {
+		return permissionCode;
+	}
+
+	public void setPermissionCode(String permissionCode) {
+		this.permissionCode = permissionCode;
+	}
+
 }

@@ -47,10 +47,16 @@
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			uid,
 			`code`,
-			parent_code,
+			<if test="parentCode != null and parentCode != ''">
+				parent_code,
+			</if>
 			`name`,
-			link_url,
-			sort,
+			<if test="linkUrl != null and linkUrl != ''">
+				link_url,
+			</if>
+			<if test="sort != null">
+				sort,
+			</if>
 			`status`,
 			create_user,
 			create_time,
@@ -60,10 +66,16 @@
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			#{uid,jdbcType=VARCHAR},
 			#{code,jdbcType=VARCHAR},
-			#{parentCode,jdbcType=VARCHAR},
+			<if test="parentCode != null and parentCode != ''">
+				#{parentCode,jdbcType=VARCHAR},
+			</if>
 			#{name,jdbcType=VARCHAR},
-			#{linkUrl,jdbcType=VARCHAR},
-			#{sort,jdbcType=INTEGER},
+			<if test="linkUrl != null and linkUrl != ''">
+				#{linkUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="sort != null">
+				#{sort,jdbcType=INTEGER},
+			</if>
 			#{status,jdbcType=VARCHAR},
 			#{createUser,jdbcType=VARCHAR},
 			STR_TO_DATE(#{createTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s'),
@@ -95,4 +107,9 @@
 		</set>
 		where `code` = #{code,jdbcType=VARCHAR}
 	</update>
+	<select id="navs" resultMap="BaseResultMap">
+		select
+		`code`,parent_code,name,link_url from sc_menu
+		where `status` = "1"
+	</select>
 </mapper>

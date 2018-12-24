@@ -13,4 +13,30 @@ public class ScRoleMenuDto extends BaseDto {
 
 	private static final long serialVersionUID = 6619127257447931432L;
 
+	/**
+	 * 角色编码
+	 */
+	private String roleCode;
+
+	/**
+	 * 菜单编码
+	 */
+	private String menuCode;
+
+	public String getRoleCode() {
+		return roleCode;
+	}
+
+	public void setRoleCode(String roleCode) {
+		this.roleCode = roleCode;
+	}
+
+	public String getMenuCode() {
+		return menuCode;
+	}
+
+	public void setMenuCode(String menuCode) {
+		this.menuCode = menuCode;
+	}
+
 }
