@@ -20,6 +20,8 @@ public class ScMenu extends BaseEntity {
 	 */
 	private String parentCode;
 
+	private String parentName;
+
 	/**
 	 * 名称
 	 */
@@ -40,7 +42,25 @@ public class ScMenu extends BaseEntity {
 	 */
 	private String status;
 
+	private String statusName;
+
 	private List<ScMenu> children;
+
+	public String getParentName() {
+		return parentName;
+	}
+
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
+	}
+
+	public String getStatusName() {
+		return statusName;
+	}
+
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
+	}
 
 	public List<ScMenu> getChildren() {
 		return children;

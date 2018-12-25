@@ -17,27 +17,9 @@
 	<body class="childrenBody">
 		<div class="layui-row search-div" style="margin: 10px; padding: 10px;">
 			<div class="layui-form">
-				编码：
+				名称：
 				<div class="layui-inline">
-					<input class="layui-input" name="code" id="code" autocomplete="off">
-				</div>
-				姓名：
-				<div class="layui-inline">
-					<input class="layui-input" name="realName" id="realName" autocomplete="off">
-				</div>
-				类型：
-				<div class="layui-inline">
-					<select id="type" name="type">
-						<option value="">请选择</option>
-						<option th:each="t : ${type}" th:attr="value=${t.code}" th:text="${t.name}"></option>
-					</select>
-				</div>
-				状态：
-				<div class="layui-inline">
-					<select name="status" id="status">
-						<option value="">请选择</option>
-						<option th:each="s : ${status}" th:attr="value=${s.code}" th:text="${s.name}"></option>
-					</select>
+					<input class="layui-input" name="name" id="name" autocomplete="off">
 				</div>
 				<button class="layui-btn" data-type="reload">搜索</button>
 			</div>
@@ -51,18 +33,28 @@
 			<button class="layui-btn layui-btn-sm" lay-event="insert">添加</button>
 		</div>
 	</script>
+	<script type="text/html" id="menuBar">
+		<a class="layui-btn layui-btn-xs" lay-event="menu">维护</a>
+	</script>
+	<script type="text/html" id="permissionBar">
+		<a class="layui-btn layui-btn-xs" lay-event="permission">授权</a>
+	</script>
+	<script type="text/html" id="userBar">
+		<a class="layui-btn layui-btn-xs" lay-event="user">查看</a>
+	</script>
 	<script type="text/html" id="fieldBar">
 		<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
 		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 	</script>
+
 	<script th:src="@{/plugins/layui/2.4.5/layui.js}"></script>
 	<script>
 		layui.use('table', function() {
 			var table = layui.table;
 			table.render({
-			    id: 'data',
+				id: 'data',
 				elem: '#data',
-				url: '/system/user/page',
+				url: '/system/role/page',
 				toolbar: '#toolbar',
 				method: 'post',
 				limits: [10, 20, 50, 100],
@@ -73,34 +65,18 @@
 						align: 'center',
 						sort: true
 					}, {
-						field: 'realName',
-						title: '姓名',
-						sort: true,
-						templet: function(obj) {
-							return obj.extend.realName;
-						}
-					}, {
-						field: 'userName',
-						title: '用户名',
+						field: 'name',
+						title: '名称',
 						sort: true
 					}, {
-						field: 'phone',
-						title: '手机号',
-						sort: true
+						title: '菜单',
+						toolbar: '#menuBar'
 					}, {
-						field: 'mail',
-						title: '邮箱',
-						sort: true
+						title: '权限',
+						toolbar: '#permissionBar'
 					}, {
-						field: 'typeName',
-						title: '类型',
-						align: 'center',
-						sort: true
-					}, {
-						field: 'statusName',
-						title: '状态',
-						align: 'center',
-						sort: true
+						title: '用户列表',
+						toolbar: '#userBar'
 					}, {
 						field: 'createTime',
 						title: '创建时间',
@@ -127,6 +103,9 @@
 					msgName: 'message', //规定状态信息的字段名称，默认：msg
 					countName: 'total', //规定数据总数的字段名称，默认：count
 					dataName: 'data' //规定数据列表的字段名称，默认：data
+				},
+				parseData: function(res) {
+					console.log(JSON.stringify(res));
 				},
 				page: true
 			});
@@ -170,8 +149,8 @@
 							where: {
 								code: $("#code").val(),
 								type: $("#type").val(),
-								status:$("#status").val(),
-								realName:$("#realName").val()
+								status: $("#status").val(),
+								realName: $("#realName").val()
 							}
 						});
 					}

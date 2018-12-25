@@ -34,9 +34,55 @@ public class ScUser extends BaseEntity {
 	private String email;
 
 	/**
+	 * 类型
+	 */
+	private String type;
+
+	private String typeName;
+
+	/**
 	 * 状态
 	 */
 	private String status;
+
+	private String statusName;
+
+	/**
+	 * 用户扩展信息
+	 */
+	private ScUserExtends extend;
+
+	public String getTypeName() {
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
+
+	public String getStatusName() {
+		return statusName;
+	}
+
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public ScUserExtends getExtend() {
+		return extend;
+	}
+
+	public void setExtend(ScUserExtends extend) {
+		this.extend = extend;
+	}
 
 	public String getUserName() {
 		return userName;

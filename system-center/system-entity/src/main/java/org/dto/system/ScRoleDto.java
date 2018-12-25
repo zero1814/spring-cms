@@ -13,4 +13,14 @@ public class ScRoleDto extends BaseDto {
 
 	private static final long serialVersionUID = 3836862548707946674L;
 
+	private String name;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 }

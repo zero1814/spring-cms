@@ -7,10 +7,14 @@
 		<result column="code" property="code" jdbcType="VARCHAR" />
 		<result column="parent_code" property="parentCode"
 			jdbcType="VARCHAR" />
+		<result column="parent_name" property="parentName"
+			jdbcType="VARCHAR" />
 		<result column="name" property="name" jdbcType="VARCHAR" />
 		<result column="link_url" property="linkUrl" jdbcType="VARCHAR" />
 		<result column="sort" property="sort" jdbcType="INTEGER" />
 		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="status_name" property="statusName"
+			jdbcType="VARCHAR" />
 		<result column="create_user" property="createUser"
 			jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime"
@@ -107,9 +111,41 @@
 		</set>
 		where `code` = #{code,jdbcType=VARCHAR}
 	</update>
-	<select id="navs" resultMap="BaseResultMap">
+	<select id="navs" resultMap="BaseResultMap" parameterType="java.lang.String">
 		select
 		`code`,parent_code,name,link_url from sc_menu
-		where `status` = "1"
+		where `status` = #{status,jdbcType=VARCHAR}
+	</select>
+	<select id="page" parameterType="org.dto.system.ScMenuDto"
+		resultMap="BaseResultMap">
+		SELECT
+		m.`code`,
+		m.`name`,
+		m.link_url,
+		m.sort,
+		parent.`name` as
+		parent_name,
+		s.`name` as status_name,
+		m.create_time,
+		m.update_time
+		FROM
+		sc_menu AS m
+		LEFT JOIN sc_menu AS parent ON m.parent_code =
+		parent.`code`
+		LEFT JOIN sc_setting AS s ON m.`status` = s.`code`
+		<where>
+			m.uid is not null
+			<if test="status != null and status != ''">
+				AND m.`status` = #{status,jdbcType=VARCHAR}
+			</if>
+			<if test="name != null and name != '' ">
+				AND m.`name` like
+				CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="parentName != null and parentName != '' ">
+				AND parent.`name` like
+				CONCAT('%',#{parentName,jdbcType=VARCHAR},'%')
+			</if>
+		</where>
 	</select>
 </mapper>

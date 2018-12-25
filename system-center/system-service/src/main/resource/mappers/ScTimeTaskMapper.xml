@@ -25,7 +25,8 @@
 	<sql id="Base_Column_List">
 		id, code, name, time, exec_class, type, status,
 		description, create_user,
-		DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as
+		DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s')
+		as
 		create_time,
 		update_user,
 		DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s')
@@ -103,4 +104,25 @@
 		</set>
 		where `code` = #{code,jdbcType=VARCHAR}
 	</update>
+	<select id="page" resultMap="BaseResultMap"
+		parameterType="org.dto.system.ScTimeTaskDto">
+		select
+		<include refid="Base_Column_List" />
+		from sc_time_task
+		<where>
+			uid is not null
+			<if test="name != null and name != '' ">
+				AND `name` like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="type != null and type != '' ">
+				AND type = #{type,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null and status != '' ">
+				AND `status` = #{status,jdbcType=VARCHAR}
+			</if>
+			<if test="execClass != null and execClass != '' ">
+				AND exec_class like CONCAT('%',#{execClass,jdbcType=VARCHAR},'%')
+			</if>
+		</where>
+	</select>
 </mapper>

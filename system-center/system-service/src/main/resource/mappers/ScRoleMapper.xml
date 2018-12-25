@@ -16,7 +16,7 @@
 			jdbcType="VARCHAR" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, uid, code, name, create_user,
+		id, uid, `code`, `name`, create_user,
 		DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as
 		create_time,
 		update_user,
@@ -40,8 +40,8 @@
 		insert into sc_role
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			uid,
-			code,
-			name,
+			`code`,
+			`name`,
 			create_user,
 			create_time,
 			update_user,
@@ -51,7 +51,6 @@
 			#{uid,jdbcType=VARCHAR},
 			#{code,jdbcType=VARCHAR},
 			#{name,jdbcType=VARCHAR},
-			#{createUser,jdbcType=VARCHAR},
 			#{createUser,jdbcType=VARCHAR},
 			STR_TO_DATE(#{createTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s'),
 			#{updateUser,jdbcType=VARCHAR},
@@ -70,4 +69,16 @@
 		</set>
 		where `code` = #{code,jdbcType=VARCHAR}
 	</update>
+	<select id="page" parameterType="org.dto.system.ScRoleDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sc_role
+		<where>
+			uid is not null
+			<if test="name != null and name != ''">
+				AND `name` like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+			</if>
+		</where>
+	</select>
 </mapper>

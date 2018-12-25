@@ -19,6 +19,11 @@ public class ScUserDto extends BaseDto {
 	private String realName;
 
 	/**
+	 * 用户名
+	 */
+	private String userName;
+
+	/**
 	 * 手机号
 	 */
 	private String phone;
@@ -32,6 +37,14 @@ public class ScUserDto extends BaseDto {
 	 * 状态
 	 */
 	private String status;
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
 	public String getRealName() {
 		return realName;

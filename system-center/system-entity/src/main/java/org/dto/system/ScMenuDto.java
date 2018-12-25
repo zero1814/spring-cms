@@ -13,4 +13,34 @@ public class ScMenuDto extends BaseDto {
 
 	private static final long serialVersionUID = -3507182201601337619L;
 
+	private String status;
+
+	private String name;
+
+	private String parentName;
+
+	public String getParentName() {
+		return parentName;
+	}
+
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 }

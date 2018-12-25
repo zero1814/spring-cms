@@ -7,7 +7,7 @@ spring:
   datasource:
     system:
       name: yql
-      jdbcUrl: jdbc:mysql://127.0.0.1:3306/systemcenter?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+      jdbcUrl: jdbc:mysql://127.0.0.1:3306/systemcenter?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
       username: root
       password: 
       #使用druid数据源

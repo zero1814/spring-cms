@@ -81,4 +81,14 @@
 		</set>
 		where `code` = #{code,jdbcType=VARCHAR}
 	</update>
+
+	<select id="selectSetting" resultMap="BaseResultMap"
+		parameterType="org.dto.system.ScSettingDto">
+		select
+		<include refid="Base_Column_List" />
+		from sc_setting
+		<where>
+			parent_code = #{parentCode,jdbcType=VARCHAR}
+		</where>
+	</select>
 </mapper>

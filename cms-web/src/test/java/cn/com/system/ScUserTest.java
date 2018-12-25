@@ -1,6 +1,7 @@
 package cn.com.system;
 
 import org.entity.system.ScUser;
+import org.entity.system.ScUserExtends;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.service.system.IScUserService;
@@ -25,16 +26,21 @@ public class ScUserTest {
 	@Autowired
 	private IScUserService service;
 
+	@Test
 	public void insert() {
 		ScUser entity = new ScUser();
 		entity.setUid(CodeHelper.getUUID());
 		entity.setCode(CodeHelper.getCode("SU"));
-		entity.setUserName(Pinyin4jUtil.converterToSpell("张三"));
+		entity.setUserName(Pinyin4jUtil.converterToSpell("李四"));
 		entity.setPassword(MD5Util.md5Hex("123456"));
-		entity.setEmail("1222@te.com");
-		entity.setPhone("13422983321");
+		entity.setEmail("121231321@te.com");
+		entity.setPhone("13422933321");
 		entity.setCreateUser("insert");
+		entity.setType("1");
 		entity.setStatus("1");
+		ScUserExtends extend = new ScUserExtends();
+		extend.setRealName("李四");
+		entity.setExtend(extend);
 		service.insert(entity);
 	}
 
@@ -51,7 +57,6 @@ public class ScUserTest {
 		System.out.println(JSON.toJSON(result));
 	}
 
-	@Test
 	public void del() {
 		BaseResult result = service.delete("SU1077022534957789184");
 		System.out.println(JSON.toJSON(result));

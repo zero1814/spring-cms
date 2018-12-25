@@ -13,6 +13,10 @@ public class ScTimeTaskDto extends BaseDto {
 
 	private static final long serialVersionUID = -7701721932065067076L;
 
+	private String name;
+
+	private String execClass;
+
 	/**
 	 * 类型
 	 */
@@ -22,6 +26,22 @@ public class ScTimeTaskDto extends BaseDto {
 	 * 状态
 	 */
 	private String status;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getExecClass() {
+		return execClass;
+	}
+
+	public void setExecClass(String execClass) {
+		this.execClass = execClass;
+	}
 
 	public String getType() {
 		return type;

@@ -5,9 +5,12 @@ import java.util.List;
 
 import org.dto.system.ScMenuDto;
 import org.entity.system.ScMenu;
+import org.entity.system.ScSetting;
 import org.mapper.system.ScMenuMapper;
+import org.mapper.system.ScSettingMapper;
 import org.service.system.IScMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.zero.spring.mybatis.BaseServiceImpl;
 
@@ -28,11 +31,24 @@ public class ScMenuServiceImpl extends BaseServiceImpl<ScMenu, ScMenuMapper, ScM
 	@Autowired
 	private ScMenuMapper mapper;
 
+	@Autowired
+	private ScSettingMapper settingMapper;
+
+	@Value("${system.menu.status}")
+	private String statusCode;
+
+	/**
+	 * 
+	 * 方法: navs <br>
+	 * 
+	 * @return
+	 * @see org.service.system.IScMenuService#navs()
+	 */
 	@Override
 	public DataResult<ScMenu> navs() {
 		DataResult<ScMenu> result = new DataResult<ScMenu>();
 		try {
-			List<ScMenu> list = mapper.navs();
+			List<ScMenu> list = mapper.navs("SS1077459485900926976");
 			if (list != null && list.size() > 0) {
 				result.setData(tree(list));
 				result.setCode(ResultType.SUCCESS);
@@ -67,5 +83,17 @@ public class ScMenuServiceImpl extends BaseServiceImpl<ScMenu, ScMenuMapper, ScM
 			}
 		}
 		return tree;
+	}
+
+	/**
+	 * 
+	 * 方法: status <br>
+	 * 
+	 * @return
+	 * @see org.service.system.IScMenuService#status()
+	 */
+	@Override
+	public List<ScSetting> status() {
+		return settingMapper.selectSetting(statusCode);
 	}
 }

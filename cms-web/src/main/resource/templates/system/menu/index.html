@@ -17,20 +17,13 @@
 	<body class="childrenBody">
 		<div class="layui-row search-div" style="margin: 10px; padding: 10px;">
 			<div class="layui-form">
-				编码：
+				名称：
 				<div class="layui-inline">
-					<input class="layui-input" name="code" id="code" autocomplete="off">
+					<input class="layui-input" name="name" id="name" autocomplete="off">
 				</div>
-				姓名：
+				父级名称：
 				<div class="layui-inline">
-					<input class="layui-input" name="realName" id="realName" autocomplete="off">
-				</div>
-				类型：
-				<div class="layui-inline">
-					<select id="type" name="type">
-						<option value="">请选择</option>
-						<option th:each="t : ${type}" th:attr="value=${t.code}" th:text="${t.name}"></option>
-					</select>
+					<input class="layui-input" name="parentName" id="parentName" autocomplete="off">
 				</div>
 				状态：
 				<div class="layui-inline">
@@ -60,11 +53,10 @@
 		layui.use('table', function() {
 			var table = layui.table;
 			table.render({
-			    id: 'data',
 				elem: '#data',
-				url: '/system/user/page',
-				toolbar: '#toolbar',
+				url: '/system/menu/page',
 				method: 'post',
+				toolbar: '#toolbar',
 				limits: [10, 20, 50, 100],
 				cols: [
 					[{
@@ -73,28 +65,20 @@
 						align: 'center',
 						sort: true
 					}, {
-						field: 'realName',
-						title: '姓名',
-						sort: true,
-						templet: function(obj) {
-							return obj.extend.realName;
-						}
-					}, {
-						field: 'userName',
-						title: '用户名',
+						field: 'name',
+						title: '名称',
 						sort: true
 					}, {
-						field: 'phone',
-						title: '手机号',
+						field: 'parentName',
+						title: '父级菜单',
 						sort: true
 					}, {
-						field: 'mail',
-						title: '邮箱',
+						field: 'linkUrl',
+						title: '链接地址',
 						sort: true
 					}, {
-						field: 'typeName',
-						title: '类型',
-						align: 'center',
+						field: 'sort',
+						title: '排序',
 						sort: true
 					}, {
 						field: 'statusName',
@@ -162,6 +146,7 @@
 					});
 				}
 			});
+
 			var $ = layui.$,
 				active = {
 					reload: function() {
@@ -169,9 +154,8 @@
 						table.reload('data', {
 							where: {
 								code: $("#code").val(),
-								type: $("#type").val(),
-								status:$("#status").val(),
-								realName:$("#realName").val()
+								parentName: $("#parentName").val(),
+								status: $("#status").val()
 							}
 						});
 					}

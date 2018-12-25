@@ -8,7 +8,6 @@
 		<result column="code" property="code" jdbcType="VARCHAR" />
 		<result column="real_name" property="realName"
 			jdbcType="VARCHAR" />
-		<result column="type" property="type" jdbcType="VARCHAR" />
 		<result column="create_user" property="createUser"
 			jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime"
@@ -19,7 +18,7 @@
 			jdbcType="VARCHAR" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, uid, code, real_name, type, create_user,
+		id, uid, code, real_name, create_user,
 		DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as
 		create_time,
 		update_user,
@@ -38,14 +37,13 @@
 		delete from sc_user_extends
 		where `code` = #{code,jdbcType=VARCHAR}
 	</delete>
-	<insert id="insertSelective"
+	<insert id="insert"
 		parameterType="org.entity.system.ScUserExtends">
 		insert into sc_user_extends
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			uid,
 			code,
 			real_name,
-			type,
 			create_user,
 			create_time,
 			update_user,
@@ -55,11 +53,10 @@
 			#{uid,jdbcType=VARCHAR},
 			#{code,jdbcType=VARCHAR},
 			#{realName,jdbcType=VARCHAR},
-			#{type,jdbcType=VARCHAR},
 			#{createUser,jdbcType=VARCHAR},
 			STR_TO_DATE(#{createTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s'),
-			#{updateUser,jdbcType=VARCHAR},
-			STR_TO_DATE(#{updateTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s'),
+			#{createUser,jdbcType=VARCHAR},
+			STR_TO_DATE(#{createTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s'),
 		</trim>
 	</insert>
 	<update id="update"
@@ -68,9 +65,6 @@
 		<set>
 			<if test="realName != null and realName != '' ">
 				real_name = #{realName,jdbcType=VARCHAR},
-			</if>
-			<if test="type != null and type != '' ">
-				type = #{type,jdbcType=VARCHAR},
 			</if>
 			update_user = #{updateUser,jdbcType=VARCHAR},
 			update_time =

@@ -18,25 +18,12 @@ public class ScUserExtends extends BaseEntity {
 	 */
 	private String realName;
 
-	/**
-	 * 类型
-	 */
-	private String type;
-
 	public String getRealName() {
 		return realName;
 	}
 
 	public void setRealName(String realName) {
 		this.realName = realName;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
 	}
 
 }

@@ -24,6 +24,7 @@ public class ScMenuTest {
 	@Autowired
 	private IScMenuService service;
 
+	@Test
 	public void insert() {
 		String createUser = "insert";
 		String status = "1";
@@ -50,7 +51,7 @@ public class ScMenuTest {
 		entity2.setUid(CodeHelper.getUUID());
 		entity2.setCode(CodeHelper.getCode("SM"));
 		entity2.setName("用户管理");
-		entity.setLinkUrl("system/user/index");
+		entity2.setLinkUrl("system/user/index");
 		entity2.setSort(1);
 		entity2.setCreateUser(createUser);
 		entity2.setStatus(status);

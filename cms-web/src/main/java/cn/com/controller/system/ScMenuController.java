@@ -21,7 +21,9 @@ public class ScMenuController extends BaseController<ScMenu, ScMenuDto, IScMenuS
 
 	@GetMapping("index")
 	public ModelAndView index() {
-		return new ModelAndView("system/menu/index");
+		ModelAndView view = new ModelAndView("system/menu/index");
+		view.addObject("status", service.status());
+		return view;
 	}
 
 	@GetMapping("navs")

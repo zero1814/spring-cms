@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.zero.spring.mybatis.BaseDto;
 import org.zero.spring.mybatis.BaseEntity;
 import org.zero.spring.mybatis.IBaseService;
@@ -43,7 +42,7 @@ public class BaseController<T extends BaseEntity, D extends BaseDto, S extends I
 	}
 
 	@PostMapping("page")
-	public PageResult<T> page(@RequestBody D dto) {
+	public PageResult<T> page(D dto) {
 		return service.page(dto);
 	}
 

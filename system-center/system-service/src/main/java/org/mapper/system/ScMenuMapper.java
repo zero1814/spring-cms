@@ -24,5 +24,5 @@ public interface ScMenuMapper extends IBaseMapper<ScMenu, ScMenuDto> {
 	 * 
 	 * @return
 	 */
-	List<ScMenu> navs();
+	List<ScMenu> navs(String status);
 }

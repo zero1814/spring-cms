@@ -11,7 +11,12 @@
 			jdbcType="VARCHAR" />
 		<result column="phone" property="phone" jdbcType="VARCHAR" />
 		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="type" property="type" jdbcType="VARCHAR" />
+		<result column="type_name" property="typeName"
+			jdbcType="VARCHAR" />
 		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="status_name" property="statusName"
+			jdbcType="VARCHAR" />
 		<result column="create_user" property="createUser"
 			jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime"
@@ -20,9 +25,15 @@
 			jdbcType="VARCHAR" />
 		<result column="update_time" property="updateTime"
 			jdbcType="VARCHAR" />
+		<collection property="extend"
+			javaType="org.entity.system.ScUserExtends">
+			<result column="real_name" property="realName"
+				jdbcType="VARCHAR" />
+		</collection>
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, uid, code, user_name, password, phone, email, status,
+		id, uid, code, user_name, password, phone, email,type,
+		status,
 		create_user,
 		DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as
 		create_time,
@@ -53,6 +64,7 @@
 			password,
 			phone,
 			email,
+			type,
 			status,
 			create_user,
 			create_time,
@@ -66,6 +78,7 @@
 			#{password,jdbcType=VARCHAR},
 			#{phone,jdbcType=VARCHAR},
 			#{email,jdbcType=VARCHAR},
+			#{type,jdbcType=VARCHAR},
 			#{status,jdbcType=VARCHAR},
 			#{createUser,jdbcType=VARCHAR},
 			STR_TO_DATE(#{createTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s'),
@@ -73,8 +86,7 @@
 			STR_TO_DATE(#{updateTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s'),
 		</trim>
 	</insert>
-	<update id="update"
-		parameterType="org.entity.system.ScUser">
+	<update id="update" parameterType="org.entity.system.ScUser">
 		update sc_user
 		<set>
 			<if test="password != null and password != '' ">
@@ -86,6 +98,9 @@
 			<if test="email != null and email != '' ">
 				email = #{email,jdbcType=VARCHAR},
 			</if>
+			<if test="type != null and type != '' ">
+				type = #{type,jdbcType=VARCHAR},
+			</if>
 			<if test="status != null and status != '' ">
 				status = #{status,jdbcType=VARCHAR},
 			</if>
@@ -95,4 +110,51 @@
 		</set>
 		where `code` = #{code,jdbcType=VARCHAR}
 	</update>
+	<select id="page" parameterType="org.dto.system.ScUserDto"
+		resultMap="BaseResultMap">
+		SELECT
+		u.`code`,
+		u.user_name,
+		u.phone,
+		u.email,
+		u.`status`,
+		ue.real_name,
+		t.`name` as type_name,
+		s.`name` as status_name,
+		DATE_FORMAT(u.create_time,'%Y-%m-%d %H:%i:%s') as
+		create_time,
+		DATE_FORMAT(u.update_time,'%Y-%m-%d %H:%i:%s')
+		as
+		update_time
+		FROM
+		sc_user
+		AS u
+		LEFT JOIN sc_user_extends AS ue ON u.`code` =
+		ue.`code`
+		LEFT JOIN
+		sc_setting as t ON u.type = t.`code`
+		LEFT JOIN
+		sc_setting as s ON
+		u.`status` = s.`code`
+		<where>
+			u.uid is not null
+			<if test="userName != null and userName != '' ">
+				AND u.user_name = #{userName,jdbcType=VARCHAR}
+			</if>
+			<if test="phone != null and phone != '' ">
+				AND u.phone like
+				CONCAT('%',#{phone,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="type != null and type != '' ">
+				AND u.`type` = #{type,jdbcType=VARCHAR}
+			</if>
+			<if test="status != null and status != '' ">
+				AND u.`status` = #{status,jdbcType=VARCHAR}
+			</if>
+			<if test="realName != null and realName != '' ">
+				AND ue.real_name like
+				CONCAT('%',#{realName,jdbcType=VARCHAR},'%')
+			</if>
+		</where>
+	</select>
 </mapper>

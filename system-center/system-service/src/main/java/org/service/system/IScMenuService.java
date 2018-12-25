@@ -1,7 +1,10 @@
 package org.service.system;
 
+import java.util.List;
+
 import org.dto.system.ScMenuDto;
 import org.entity.system.ScMenu;
+import org.entity.system.ScSetting;
 import org.zero.spring.mybatis.IBaseService;
 
 import zero.commons.basics.result.DataResult;
@@ -25,4 +28,15 @@ public interface IScMenuService extends IBaseService<ScMenu, ScMenuDto> {
 	 * @return
 	 */
 	DataResult<ScMenu> navs();
+	
+	
+	/**
+	 * 
+	 * 方法: status <br>
+	 * 描述: 获取菜单状态列表 <br>
+	 * 作者: zhy<br>
+	 * 时间: 2018年12月25日 下午3:04:34
+	 * @return
+	 */
+	List<ScSetting> status();
 }
