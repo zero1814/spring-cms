@@ -10,7 +10,9 @@
 		<result column="exec_class" property="execClass"
 			jdbcType="VARCHAR" />
 		<result column="type" property="type" jdbcType="VARCHAR" />
+		<result column="type_name" property="typeName" jdbcType="VARCHAR" />
 		<result column="status" property="status" jdbcType="VARCHAR" />
+		<result column="status_name" property="statusName" jdbcType="VARCHAR" />
 		<result column="description" property="description"
 			jdbcType="VARCHAR" />
 		<result column="create_user" property="createUser"
@@ -45,7 +47,7 @@
 		where
 		`code` = #{code,jdbcType=VARCHAR}
 	</delete>
-	<insert id="insertSelective"
+	<insert id="insert"
 		parameterType="org.entity.system.ScTimeTask">
 		insert into sc_time_task
 		<trim prefix="(" suffix=")" suffixOverrides=",">
@@ -107,21 +109,31 @@
 	<select id="page" resultMap="BaseResultMap"
 		parameterType="org.dto.system.ScTimeTaskDto">
 		select
-		<include refid="Base_Column_List" />
-		from sc_time_task
+		stt.`code`,
+		stt.`name`,
+		stt.time,
+		stt.exec_class,
+		t.`name` as type_name,
+		s.`name` as status_name,
+		stt.create_time,
+		stt.update_time
+		from sc_time_task as stt LEFT JOIN sc_setting as t ON stt.type = t.`code`
+		LEFT JOIN sc_setting as s ON stt.`status` = s.`code`
 		<where>
-			uid is not null
+			stt.uid is not null
 			<if test="name != null and name != '' ">
-				AND `name` like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+				AND stt.`name` like
+				CONCAT('%',#{name,jdbcType=VARCHAR},'%')
 			</if>
 			<if test="type != null and type != '' ">
-				AND type = #{type,jdbcType=VARCHAR}
+				AND stt.type = #{type,jdbcType=VARCHAR}
 			</if>
 			<if test="status != null and status != '' ">
-				AND `status` = #{status,jdbcType=VARCHAR}
+				AND stt.`status` = #{status,jdbcType=VARCHAR}
 			</if>
 			<if test="execClass != null and execClass != '' ">
-				AND exec_class like CONCAT('%',#{execClass,jdbcType=VARCHAR},'%')
+				AND stt.exec_class like
+				CONCAT('%',#{execClass,jdbcType=VARCHAR},'%')
 			</if>
 		</where>
 	</select>

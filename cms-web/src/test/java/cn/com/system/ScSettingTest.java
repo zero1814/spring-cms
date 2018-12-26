@@ -95,7 +95,6 @@ public class ScSettingTest {
 		service.insert(entity3);
 	}
 
-	@Test
 	public void insertMenuStatus() {
 //		ScSetting entity = new ScSetting();
 //		entity.setUid(CodeHelper.getUUID());
@@ -151,5 +150,39 @@ public class ScSettingTest {
 		entity6.setName("否");
 		entity6.setCreateUser("insert");
 		service.insert(entity6);
+	}
+
+	@Test
+	public void insertTimeTaskType() {
+		ScSetting entity = new ScSetting();
+		entity.setUid(CodeHelper.getUUID());
+		entity.setCode(CodeHelper.getCode("SS"));
+		entity.setName("定时任务相关");
+		entity.setCreateUser("insert");
+		service.insert(entity);
+
+		ScSetting entity1 = new ScSetting();
+		entity1.setUid(CodeHelper.getUUID());
+		entity1.setCode(CodeHelper.getCode("SS"));
+		entity1.setParentCode(entity.getCode());
+		entity1.setName("定时任务类型");
+		entity1.setCreateUser("insert");
+		service.insert(entity1);
+		
+		ScSetting entity2 = new ScSetting();
+		entity2.setUid(CodeHelper.getUUID());
+		entity2.setCode(CodeHelper.getCode("SS"));
+		entity2.setParentCode(entity1.getCode());
+		entity2.setName("用户相关");
+		entity2.setCreateUser("insert");
+		service.insert(entity2);
+		
+		ScSetting entity3 = new ScSetting();
+		entity3.setUid(CodeHelper.getUUID());
+		entity3.setCode(CodeHelper.getCode("SS"));
+		entity3.setParentCode(entity1.getCode());
+		entity3.setName("系统相关");
+		entity3.setCreateUser("insert");
+		service.insert(entity3);
 	}
 }

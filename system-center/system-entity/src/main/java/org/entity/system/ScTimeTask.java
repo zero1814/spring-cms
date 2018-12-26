@@ -33,15 +33,34 @@ public class ScTimeTask extends BaseEntity {
 	 */
 	private String type;
 
+	private String typeName;
 	/**
 	 * 状态
 	 */
 	private String status;
 
+	private String statusName;
+
 	/**
 	 * 描述
 	 */
 	private String description;
+
+	public String getTypeName() {
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
+
+	public String getStatusName() {
+		return statusName;
+	}
+
+	public void setStatusName(String statusName) {
+		this.statusName = statusName;
+	}
 
 	public String getName() {
 		return name;
