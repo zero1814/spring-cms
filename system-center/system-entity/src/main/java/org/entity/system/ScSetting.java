@@ -1,5 +1,7 @@
 package org.entity.system;
 
+import java.util.List;
+
 import org.zero.spring.mybatis.BaseEntity;
 
 /**
@@ -18,10 +20,30 @@ public class ScSetting extends BaseEntity {
 	 */
 	private String parentCode;
 
+	private String parentName;
+
 	/**
 	 * 名称
 	 */
 	private String name;
+
+	private List<ScSetting> children;
+
+	public String getParentName() {
+		return parentName;
+	}
+
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
+	}
+
+	public List<ScSetting> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<ScSetting> children) {
+		this.children = children;
+	}
 
 	public String getParentCode() {
 		return parentCode;

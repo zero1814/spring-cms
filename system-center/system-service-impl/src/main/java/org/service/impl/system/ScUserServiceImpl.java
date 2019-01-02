@@ -2,6 +2,7 @@ package org.service.impl.system;
 
 import java.util.List;
 
+import org.dto.system.ScSettingDto;
 import org.dto.system.ScUserDto;
 import org.entity.system.ScSetting;
 import org.entity.system.ScUser;
@@ -64,7 +65,9 @@ public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScU
 	 */
 	@Override
 	public List<ScSetting> types() {
-		return settingMapper.selectSetting(typeCode);
+		ScSettingDto dto = new ScSettingDto();
+		dto.setParentCode(typeCode);
+		return settingMapper.selectAll(dto);
 	}
 
 	/**
@@ -76,6 +79,8 @@ public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScU
 	 */
 	@Override
 	public List<ScSetting> status() {
-		return settingMapper.selectSetting(statusCode);
+		ScSettingDto dto = new ScSettingDto();
+		dto.setParentCode(statusCode);
+		return settingMapper.selectAll(dto);
 	}
 }

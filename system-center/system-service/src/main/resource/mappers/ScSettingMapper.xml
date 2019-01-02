@@ -6,9 +6,11 @@
 		<id column="id" property="id" jdbcType="INTEGER" />
 		<result column="uid" property="uid" jdbcType="VARCHAR" />
 		<result column="code" property="code" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
 		<result column="parent_code" property="parentCode"
 			jdbcType="VARCHAR" />
-		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="parent_name" property="parentName"
+			jdbcType="VARCHAR" />
 		<result column="create_user" property="createUser"
 			jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime"
@@ -29,10 +31,11 @@
 	</sql>
 	<select id="select" resultMap="BaseResultMap"
 		parameterType="java.lang.String">
-		select
-		<include refid="Base_Column_List" />
-		from sc_setting
-		where `code` = #{code,jdbcType=VARCHAR}
+		select s.`code`,s.`name`,s.parent_code,p.`name` as
+		parent_name from
+		sc_setting as s LEFT JOIN sc_setting as p ON
+		s.parent_code = p.`code`
+		where s.`code` = #{code,jdbcType=VARCHAR}
 	</select>
 	<delete id="delete" parameterType="java.lang.String">
 		delete from sc_setting
@@ -82,13 +85,19 @@
 		where `code` = #{code,jdbcType=VARCHAR}
 	</update>
 
-	<select id="selectSetting" resultMap="BaseResultMap"
+	<select id="selectAll" resultMap="BaseResultMap"
 		parameterType="org.dto.system.ScSettingDto">
-		select
-		<include refid="Base_Column_List" />
-		from sc_setting
+		select s.`code`,s.`name`,s.parent_code,p.`name` as parent_name from
+		sc_setting as s LEFT JOIN sc_setting as p ON s.parent_code = p.`code`
 		<where>
-			parent_code = #{parentCode,jdbcType=VARCHAR}
+			s.uid is not null
+			<if test="parentCode != null and parentCode != '' ">
+				AND s.parent_code = #{parentCode,jdbcType=VARCHAR}
+			</if>
+			<if test="name != null and name != '' ">
+				AND s.`name` like
+				CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+			</if>
 		</where>
 	</select>
 </mapper>

@@ -20,8 +20,9 @@ public interface ScSettingMapper extends IBaseMapper<ScSetting, ScSettingDto> {
 	 * 描述: 根据父级编码查询子类 <br>
 	 * 作者: zhy<br>
 	 * 时间: 2018年12月25日 上午9:45:14
+	 * 
 	 * @param parentCode
 	 * @return
 	 */
-	List<ScSetting> selectSetting(String parentCode);
+	List<ScSetting> selectAll(String parentCode);
 }

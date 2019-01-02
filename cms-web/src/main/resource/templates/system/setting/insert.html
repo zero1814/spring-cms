@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" th:href="@{/assets/plugins/layui/dtree/font/dtreefont.css}" media="all" />
+		<link rel="stylesheet" th:href="@{/plugins/layui/2.4.5/css/layui.css}" media="all" />
+		<link rel="stylesheet" th:href="@{/css/public.css}" media="all" />
+	</head>
+
+	<body class="childrenBody">
+		<div class="layui-form">
+			<input type="hidden" name="code" id="code" th:attr="value=${code}" />
+			<input type="hidden" name="parentCode" id="parentCode"  th:attr="value=${parentCode}" />
+			<div class="layui-form-item">
+				<label class="layui-form-label">名称</label>
+				<div class="layui-input-inline">
+					<input value="" id="name" name="name" autocomplete="off" class="layui-input" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="form-btn layui-input-block">
+					<button type="button" class="layui-btn"  data-type="insert">提交</button>
+					<button type="button" class="layui-btn layui-btn-primary"  data-type="cancel">取消</button>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script th:src="@{/plugins/layui/2.4.5/layui.js}"></script>
+	<script>
+		layui.use('form', function(){
+			var $ = layui.$,
+				active = {
+					insert: function() {
+					var data = {
+					    parentCode: $("#parentCode").val(),
+						code: $("#code").val(),
+						name: $("#name").val()
+					};
+		         		$.ajax({
+		            		type: "POST",
+		            		url: "/system/setting/insert",
+		           	 		dataType: "json",
+		           	 		data: JSON.stringify(data),
+		           	 		contentType: "application/json;charset=utf-8",
+		            		success: function(res){
+		            			parent.layer.alert(res.message,function(){
+		            				parent.window.open("/system/setting/index", "_self");
+		            			});
+		            		},
+		            		error: function(res){
+		            			parent.layer.alert("error:"+JSON.stringify(res));		            		
+		            		}
+		         		});
+					},
+					cancel:function(){
+					   parent.window.open("/system/setting/index", "_self");
+					}
+				};
+
+			$('.form-btn .layui-btn').on('click', function() {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+		});
+	</script>
+</html>

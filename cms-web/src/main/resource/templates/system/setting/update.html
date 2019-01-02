@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" th:href="@{/assets/plugins/layui/dtree/font/dtreefont.css}" media="all" />
+		<link rel="stylesheet" th:href="@{/plugins/layui/2.4.5/css/layui.css}" media="all" />
+		<link rel="stylesheet" th:href="@{/css/public.css}" media="all" />
+	</head>
+
+	<body class="childrenBody">
+		<form class="layui-form" action="">
+			<input type="hidden" name="code" id="code" th:attr="value=${entity.code}"/>
+			<div class="layui-form-item">
+				<label class="layui-form-label">名称</label>
+				<div class="layui-input-inline">
+					<input readonly="readonly" th:attr="value=${entity.name}" name="name" autocomplete="off" class="layui-input" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="form-btn layui-input-block">
+					<button type="button" class="layui-btn"  data-type="insert">提交</button>
+					<button type="button" class="layui-btn layui-btn-primary"  data-type="cancel">取消</button>
+				</div>
+			</div>
+		</form>
+	</body>
+	<script th:src="@{/plugins/layui/2.4.5/layui.js}"></script>
+	<script>
+		layui.use('form', function(){
+			var form = layui.form;
+			var $ = layui.$,
+				active = {
+					insert: function() {
+		         		$.ajax({
+		            		type: "POST",
+		            		url: "/system/setting/update",
+		           	 		dataType: "json",
+		           	 		data:{
+		           	 			name:$("#name").val()
+		           	 		},
+		            		success: function(res){
+		            			layui.alert(res.message);
+		            		}
+		         		});
+					},
+					cancel:function(){
+					   parent.window.open("/system/setting/index", "_self");
+					}
+				};
+
+			$('.form-btn .layui-btn').on('click', function() {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+		});
+	</script>
+</html>

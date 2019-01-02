@@ -1,11 +1,19 @@
 package org.service.impl.system;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.dto.system.ScSettingDto;
 import org.entity.system.ScSetting;
 import org.mapper.system.ScSettingMapper;
 import org.service.system.IScSettingService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.zero.spring.mybatis.BaseServiceImpl;
+
+import zero.commons.basics.StringUtils;
+import zero.commons.basics.result.DataResult;
+import zero.commons.basics.result.ResultType;
 
 /**
  * 
@@ -17,4 +25,46 @@ import org.zero.spring.mybatis.BaseServiceImpl;
 @Service
 public class ScSettingServiceImpl extends BaseServiceImpl<ScSetting, ScSettingMapper, ScSettingDto>
 		implements IScSettingService {
+
+	@Autowired
+	private ScSettingMapper mapper;
+
+	@Override
+	public DataResult<ScSetting> tree(ScSettingDto dto) {
+		DataResult<ScSetting> result = new DataResult<ScSetting>();
+		try {
+			List<ScSetting> list = mapper.selectAll(dto);
+			if (list != null && list.size() > 0) {
+				result.setData(tree(list));
+				result.setCode(ResultType.SUCCESS);
+				result.setMessage("查询成功");
+			} else {
+				result.setCode(ResultType.NULL);
+				result.setMessage("查询数据为空");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setCode(ResultType.NULL);
+			result.setMessage("查询系统配置信息错误，错误原因：" + e.getMessage());
+		}
+		return result;
+	}
+
+	private List<ScSetting> tree(List<ScSetting> list) {
+		List<ScSetting> tree = new ArrayList<ScSetting>();
+		for (ScSetting parent : list) {
+			if (StringUtils.equals(parent.getCode(), "0")) {
+				tree.add(parent);
+			}
+			for (ScSetting child : list) {
+				if (StringUtils.equals(child.getParentCode(), parent.getCode())) {
+					if (parent.getChildren() == null) {
+						parent.setChildren(new ArrayList<ScSetting>());
+					}
+					parent.getChildren().add(child);
+				}
+			}
+		}
+		return tree;
+	}
 }

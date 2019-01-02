@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.dto.system.ScMenuDto;
+import org.dto.system.ScSettingDto;
 import org.entity.system.ScMenu;
 import org.entity.system.ScSetting;
 import org.mapper.system.ScMenuMapper;
@@ -94,6 +95,8 @@ public class ScMenuServiceImpl extends BaseServiceImpl<ScMenu, ScMenuMapper, ScM
 	 */
 	@Override
 	public List<ScSetting> status() {
-		return settingMapper.selectSetting(statusCode);
+		ScSettingDto dto = new ScSettingDto();
+		dto.setParentCode(statusCode);
+		return settingMapper.selectAll(dto);
 	}
 }

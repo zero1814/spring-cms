@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" th:href="@{/assets/plugins/layui/dtree/font/dtreefont.css}" media="all" />
+		<link rel="stylesheet" th:href="@{/plugins/layui/2.4.5/css/layui.css}" media="all" />
+		<link rel="stylesheet" th:href="@{/css/public.css}" media="all" />
+	</head>
+
+	<body class="childrenBody">
+		<div id="tree_form">
+			<input type="hidden" name="code" id="code" th:attr="value=${entity.code}" />
+			<input type="hidden" name="parentCode" id="parentCode" th:attr="value=${entity.parentCode}" />
+			<div class="layui-form-item">
+				<label class="layui-form-label">名称</label>
+				<div class="layui-input-inline">
+					<input disabled="disabled" th:attr="value=${entity.name}" name="name" autocomplete="off" class="layui-input" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">父级名称</label>
+				<div class="layui-input-inline">
+					<input disabled="disabled" name="parentName" th:attr="value=${entity.parentName}"  autocomplete="off" class="layui-input" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="operation-btn layui-input-block">
+					<button type="button" class="layui-btn" data-type="update">编辑</button>
+					<button type="button" class="layui-btn layui-btn-primary" data-type="insert">添加子节点</button>
+					<button type="button" class="layui-btn layui-btn-danger" data-type="del">删除</button>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script th:src="@{/plugins/layui/2.4.5/layui.js}"></script>
+	<script type="text/javascript">
+		layui.use(['jquery','layer'], function() {
+			var $ = layui.$,
+				active = {
+					insert: function() {
+						var parentCode = $("#code").val();
+						window.open("/system/setting/insert/"+parentCode, "_self");
+					},
+					update:function(){
+						var code = $("#code").val();
+						window.open("/system/setting/update/"+code, "_self");
+					},
+					del:function(){
+			    		var code = $("#code").val();
+         				$.ajax({
+            				type: "GET",
+            				url: "/system/setting/del/"+code,
+           	 				dataType: "json",
+            				success: function(res){
+            					layer.alert(res.message,function(){
+            						parent.window.open("/system/setting/index", "_self");
+            					});
+            				}
+         				});
+					}
+				};
+				$('.operation-btn .layui-btn').on('click', function() {
+					var type = $(this).data('type');
+					active[type] ? active[type].call(this) : '';
+				});
+		});
+	</script>
+</html>

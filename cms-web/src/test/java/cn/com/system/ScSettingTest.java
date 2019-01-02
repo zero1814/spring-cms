@@ -1,5 +1,6 @@
 package cn.com.system;
 
+import org.dto.system.ScSettingDto;
 import org.entity.system.ScSetting;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.alibaba.fastjson.JSON;
+
 import cn.com.CmsWebApplication;
 import zero.commons.basics.helper.CodeHelper;
+import zero.commons.basics.result.DataResult;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 //这是Spring Boot注解，为了进行集成测试，需要通过这个注解加载和配置Spring应用上下
@@ -18,6 +22,14 @@ public class ScSettingTest {
 
 	@Autowired
 	private IScSettingService service;
+
+	public void rootInsert() {
+		ScSetting entity = new ScSetting();
+		entity.setCode("0");
+		entity.setName("参数配置");
+		entity.setCreateUser("system");
+		service.insert(entity);
+	}
 
 	public void insertUserType() {
 		ScSetting entity0 = new ScSetting();
@@ -152,7 +164,6 @@ public class ScSettingTest {
 		service.insert(entity6);
 	}
 
-	@Test
 	public void insertTimeTaskType() {
 		ScSetting entity = new ScSetting();
 		entity.setUid(CodeHelper.getUUID());
@@ -168,7 +179,7 @@ public class ScSettingTest {
 		entity1.setName("定时任务类型");
 		entity1.setCreateUser("insert");
 		service.insert(entity1);
-		
+
 		ScSetting entity2 = new ScSetting();
 		entity2.setUid(CodeHelper.getUUID());
 		entity2.setCode(CodeHelper.getCode("SS"));
@@ -176,7 +187,7 @@ public class ScSettingTest {
 		entity2.setName("用户相关");
 		entity2.setCreateUser("insert");
 		service.insert(entity2);
-		
+
 		ScSetting entity3 = new ScSetting();
 		entity3.setUid(CodeHelper.getUUID());
 		entity3.setCode(CodeHelper.getCode("SS"));
@@ -184,5 +195,12 @@ public class ScSettingTest {
 		entity3.setName("系统相关");
 		entity3.setCreateUser("insert");
 		service.insert(entity3);
+	}
+
+	@Test
+	public void tree() {
+		ScSettingDto dto = new ScSettingDto();
+		DataResult<ScSetting> data = service.tree(dto);
+		System.out.println(JSON.toJSON(data));
 	}
 }
