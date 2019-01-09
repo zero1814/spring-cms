@@ -17,8 +17,12 @@ import org.springframework.stereotype.Service;
 import org.zero.spring.mybatis.BaseServiceImpl;
 
 import zero.commons.basics.DateUtil;
+import zero.commons.basics.MD5Util;
+import zero.commons.basics.StringUtils;
 import zero.commons.basics.helper.CodeHelper;
 import zero.commons.basics.result.BaseResult;
+import zero.commons.basics.result.EntityResult;
+import zero.commons.basics.result.ResultType;
 
 /**
  * 
@@ -29,6 +33,9 @@ import zero.commons.basics.result.BaseResult;
  */
 @Service
 public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScUserDto> implements IScUserService {
+
+	@Autowired
+	private ScUserMapper mapper;
 
 	@Autowired
 	private ScSettingMapper settingMapper;
@@ -82,5 +89,31 @@ public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScU
 		ScSettingDto dto = new ScSettingDto();
 		dto.setParentCode(statusCode);
 		return settingMapper.selectAll(dto);
+	}
+
+	@Override
+	public EntityResult<ScUser> login(ScUserDto dto) {
+		EntityResult<ScUser> result = new EntityResult<ScUser>();
+		if (StringUtils.isBlank(dto.getUserName())) {
+			result.setCode(ResultType.NULL);
+			result.setMessage("用户名不能为空");
+			return result;
+		}
+		if (StringUtils.isBlank(dto.getPassword())) {
+			result.setCode(ResultType.NULL);
+			result.setMessage("密码不能为空");
+			return result;
+		}
+		dto.setPassword(MD5Util.md5Hex(dto.getPassword()));
+		ScUser user = mapper.login(dto);
+		if (user == null) {
+			result.setCode(ResultType.NULL);
+			result.setMessage("用户不存在");
+			return result;
+		}
+		result.setCode(ResultType.SUCCESS);
+		result.setEntity(user);
+		result.setMessage("登录成功");
+		return result;
 	}
 }

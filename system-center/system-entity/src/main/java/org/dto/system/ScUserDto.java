@@ -23,6 +23,8 @@ public class ScUserDto extends BaseDto {
 	 */
 	private String userName;
 
+	private String password;
+
 	/**
 	 * 手机号
 	 */
@@ -37,6 +39,14 @@ public class ScUserDto extends BaseDto {
 	 * 状态
 	 */
 	private String status;
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
 	public String getUserName() {
 		return userName;

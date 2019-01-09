@@ -1,8 +1,3 @@
-<!--
-	作者：zero1814@126.com
-	时间：2018-11-13
-	描述：分销管理后台-首页
--->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 	<head>
@@ -32,11 +27,11 @@
 						<li class="layui-nav-item" pc>
 							<a href="javascript:;" class="clearCache"><i class="fa fa-trash-o"></i><cite>清除缓存</cite><span class="layui-badge-dot"></span></a>
 						</li>
-						<li class="layui-nav-item lockcms" pc>
+						<li class="layui-nav-item lockcms">
 							<a href="javascript:;"><i class="seraph icon-lock"></i><cite>锁屏</cite></a>
 						</li>
 						<li class="layui-nav-item" id="userInfo">
-							<a href="javascript:;"><img src="assets/images/face.jpg" class="layui-nav-img userAvatar" width="35" height="35"><cite class="adminName">驊驊龔頾</cite></a>
+							<a href="javascript:;"><img src="assets/images/face.jpg" class="layui-nav-img userAvatar" width="35" height="35"><cite class="adminName" th:text="${user.extend.realName}"></cite></a>
 							<dl class="layui-nav-child">
 								<dd>
 									<a href="javascript:;" data-url="page/user/userInfo.html"><i class="seraph icon-ziliao" data-icon="icon-ziliao"></i><cite>个人资料</cite></a>
@@ -54,7 +49,7 @@
 									<a href="javascript:;" class="changeSkin"><i class="layui-icon">&#xe61b;</i><cite>更换皮肤</cite></a>
 								</dd>
 								<dd>
-									<a href="page/login/login.html" class="signOut"><i class="seraph icon-tuichu"></i><cite>退出</cite></a>
+									<a href="/loginout" class="signOut"><i class="seraph icon-tuichu"></i><cite>退出</cite></a>
 								</dd>
 							</dl>
 						</li>

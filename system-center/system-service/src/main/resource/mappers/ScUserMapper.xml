@@ -49,6 +49,33 @@
 		from sc_user
 		where `code` = #{code,jdbcType=VARCHAR}
 	</select>
+	<select id="selectByDto" resultMap="BaseResultMap"
+		parameterType="org.dto.system.ScUserDto">
+		select
+		<include refid="Base_Column_List" />
+		from sc_user
+		<where>
+			uid is not null
+			<if test="userName != null and userName != '' ">
+				AND user_name = #{userName,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="login" resultMap="BaseResultMap"
+		parameterType="org.dto.system.ScUserDto">
+		SELECT
+			u.user_name,
+		  u.`password`,
+			u.phone,
+		  ue.real_name
+		FROM
+			sc_user AS u
+		LEFT JOIN sc_user_extends AS ue ON u.`code` = ue.`code`
+		<where>
+			u.user_name = #{userName,jdbcType=VARCHAR}
+			AND u.`password` = #{password,jdbcType=VARCHAR}
+		</where>
+	</select>
 	<delete id="delete" parameterType="java.lang.String">
 		delete from
 		sc_user

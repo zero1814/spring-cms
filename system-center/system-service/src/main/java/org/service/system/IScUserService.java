@@ -7,6 +7,8 @@ import org.entity.system.ScSetting;
 import org.entity.system.ScUser;
 import org.zero.spring.mybatis.IBaseService;
 
+import zero.commons.basics.result.EntityResult;
+
 /**
  * 
  * 类: ScUserInfo <br>
@@ -37,4 +39,16 @@ public interface IScUserService extends IBaseService<ScUser, ScUserDto> {
 	 * @return
 	 */
 	List<ScSetting> status();
+
+	/**
+	 * 
+	 * 方法: login <br>
+	 * 描述: 管理员登录 <br>
+	 * 作者: zhy<br>
+	 * 时间: 2019年1月8日 下午2:24:55
+	 * 
+	 * @param dto
+	 * @return
+	 */
+	EntityResult<ScUser> login(ScUserDto dto);
 }
