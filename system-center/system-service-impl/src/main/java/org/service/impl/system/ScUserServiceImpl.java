@@ -18,6 +18,7 @@ import org.zero.spring.mybatis.BaseServiceImpl;
 
 import zero.commons.basics.DateUtil;
 import zero.commons.basics.MD5Util;
+import zero.commons.basics.Pinyin4jUtil;
 import zero.commons.basics.StringUtils;
 import zero.commons.basics.helper.CodeHelper;
 import zero.commons.basics.result.BaseResult;
@@ -42,6 +43,9 @@ public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScU
 	@Autowired
 	private ScUserExtendsMapper extendsMapper;
 
+	@Value("${system.password}")
+	private String defaultPassword;
+	
 	@Value("${system.user.type}")
 	private String typeCode;
 
@@ -60,6 +64,9 @@ public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScU
 			extend.setCreateTime(createTime);
 			extendsMapper.insert(entity.getExtend());
 		}
+		String userName = Pinyin4jUtil.converterToFirstSpell(entity.getExtend().getRealName());
+		entity.setUserName(userName);
+		entity.setPassword(MD5Util.md5Hex(defaultPassword));
 		return super.insert(entity);
 	}
 

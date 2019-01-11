@@ -1,5 +1,8 @@
 package cn.com.controller;
 
+import javax.servlet.http.HttpSession;
+
+import org.entity.system.ScUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,13 +28,20 @@ public class BaseController<T extends BaseEntity, D extends BaseDto, S extends I
 	private S service;
 
 	@PostMapping(value = "insert", consumes = "application/json")
-	public BaseResult insert(@RequestBody T entity) {
-		entity.setCreateUser("test");
+	public BaseResult insert(@RequestBody T entity, HttpSession session) {
+		if (session.getAttribute("user") != null) {
+			ScUser user = (ScUser) session.getAttribute("user");
+			entity.setCreateUser(user.getCode());
+		}
 		return service.insert(entity);
 	}
 
 	@PostMapping("update")
-	public BaseResult update(T entity) {
+	public BaseResult update(T entity, HttpSession session) {
+		if (session.getAttribute("user") != null) {
+			ScUser user = (ScUser) session.getAttribute("user");
+			entity.setCreateUser(user.getCode());
+		}
 		return service.update(entity);
 	}
 

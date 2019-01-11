@@ -16,28 +16,40 @@
 
 	<body class="childrenBody">
 		<form class="layui-form" action="">
+		    <input type="hidden" name="code" th:attr="value=${user.code}" id="code" />
 			<div class="layui-form-item">
 				<label class="layui-form-label">名称</label>
 				<div class="layui-input-inline">
-					<input name="name" lay-verify="name" autocomplete="off" class="layui-input" type="text">
+					<input th:attr="value=${user.extend.realName}" name="name" lay-verify="required" autocomplete="off" class="layui-input" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">手机号</label>
+				<div class="layui-input-inline">
+					<input name="phone" th:attr="value=${user.phone}" lay-verify="phone" autocomplete="off" class="layui-input" type="text">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">邮箱地址</label>
+				<div class="layui-input-inline">
+					<input th:attr="value=${user.email}" name="email" lay-verify="email"  autocomplete="off" class="layui-input" type="text">
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">类型</label>
 				<div class="layui-input-inline">
-					<select name="type" lay-filter="type">
-						<option value="0" selected="">普通管理员</option>
-						<option value="1">系统管理员</option>
-						<option value="2">超级管理员</option>
+					<select name="type" lay-filter="required" lay-search th:field="*{user.type}">
+						<option value="">请选择</option>
+						<option th:selected="${user.type == t.code}"  th:attr="value=${t.code}" th:text="${t.name}"></option>
 					</select>
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">状态</label>
 				<div class="layui-input-inline">
-					<select name="level" lay-filter="level">
-						<option value="0" selected="selected">正常</option>
-						<option value="1">已注销</option>
+					<select name="status" lay-filter="required" lay-search th:field="*{user.status}">
+						<option value="">请选择</option>
+						<option th:selected="${user.status == s.code}" th:each="s : ${status}" th:attr="value=${s.code}" th:text="${s.name}"></option>
 					</select>
 				</div>
 			</div>
@@ -57,9 +69,41 @@
 			var form = layui.form;
 			//监听提交
 			form.on('submit(submit)', function(data) {
-				layer.alert(JSON.stringify(data.field), {
-					title: '最终的提交信息'
-				})
+			var field = data.field;
+			var postData = {
+				"code":field.code,
+				"type": field.type,
+				"status":field.status,
+				"extend":{
+					"realName":field.name
+				}
+			}
+         		$.ajax({
+            		type: "POST",
+            		url: "/system/user/insert",
+           	 		dataType: "json",
+           	 		data: JSON.stringify(postData),
+           	 		contentType: "application/json;charset=utf-8",
+            		success: function(res){
+            			layer.alert(res.message,function(){
+							var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+							parent.layer.close(index); //再执行关闭 
+							parent.layui.table.reload("data", {
+								page: {
+									curr: 1
+								},
+								where: {
+									key: {
+										id: "#data"
+									}
+								}
+							})            			
+            			});
+            		},
+            		error: function(res){
+            			parent.layer.alert("error:"+JSON.stringify(res));		            		
+            		}
+         		});
 				return false;
 			});
 			var $ = layui.jquery;
