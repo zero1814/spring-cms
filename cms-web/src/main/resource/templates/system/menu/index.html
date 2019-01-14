@@ -134,30 +134,30 @@
 				var data = obj.data;
 				if(obj.event === 'del') {
 					layer.confirm('确定要删除此菜单吗？', function(index) {
-					$.ajax({
-						type: "GET",
-						url: "/system/menu/del/"+data.code,
-						dataType: "json",
-						data: {},
-						contentType: "application/json;charset=utf-8",
-						success: function(res){
-							layer.msg(res.message,{time:1000},function(){
-								layui.table.reload("data", {
-									page: {
-										curr: 1
-									},
-									where: {
-										key: {
-											id: "#data"
+						$.ajax({
+							type: "GET",
+							url: "/system/menu/del/"+data.code,
+							dataType: "json",
+							data: {},
+							contentType: "application/json;charset=utf-8",
+							success: function(res){
+								layer.msg(res.message,{time:1000},function(){
+									layui.table.reload("data", {
+										page: {
+											curr: 1
+										},
+										where: {
+											key: {
+												id: "#data"
+											}
 										}
-									}
-								})
-							});
-						},
-						error: function(res){
-							layer.alert("error:"+JSON.stringify(res));		            		
-						}
-					});
+									})
+								});
+							},
+							error: function(res){
+								layer.alert("error:"+JSON.stringify(res));		            		
+							}
+						});
 					});
 				} else if(obj.event === 'edit') {
 					layer.open({

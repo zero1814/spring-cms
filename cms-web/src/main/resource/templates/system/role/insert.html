@@ -20,37 +20,7 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">名称</label>
 				<div class="layui-input-inline">
-					<input name="name" lay-verify="required" autocomplete="off" class="layui-input" type="text">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">手机号</label>
-				<div class="layui-input-inline">
-					<input name="phone" lay-verify="phone" autocomplete="off" class="layui-input" type="text">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">邮箱地址</label>
-				<div class="layui-input-inline">
-					<input name="email" lay-verify="email"  autocomplete="off" class="layui-input" type="text">
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">类型</label>
-				<div class="layui-input-inline">
-					<select name="type" lay-filter="required">
-						<option value="">请选择</option>
-						<option th:each="t : ${type}" th:attr="value=${t.code}" th:text="${t.name}"></option>
-					</select>
-				</div>
-			</div>
-			<div class="layui-form-item">
-				<label class="layui-form-label">状态</label>
-				<div class="layui-input-inline">
-					<select name="status" lay-filter="required">
-						<option value="">请选择</option>
-						<option th:each="s : ${status}" th:attr="value=${s.code}" th:text="${s.name}"></option>
-					</select>
+					<input id="name" name="name" lay-verify="required" autocomplete="off" class="layui-input" type="text">
 				</div>
 			</div>
 			<div class="layui-form-item">
@@ -72,15 +42,11 @@
 			var field = data.field;
 			var postData = {
 				"code":field.code,
-				"type": field.type,
-				"status":field.status,
-				"extend":{
-					"realName":field.name
-				}
+				"name": field.name
 			}
          		$.ajax({
             		type: "POST",
-            		url: "/system/user/insert",
+            		url: "/system/role/insert",
            	 		dataType: "json",
            	 		data: JSON.stringify(postData),
            	 		contentType: "application/json;charset=utf-8",
