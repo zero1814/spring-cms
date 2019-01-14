@@ -36,11 +36,11 @@ public class BaseController<T extends BaseEntity, D extends BaseDto, S extends I
 		return service.insert(entity);
 	}
 
-	@PostMapping("update")
-	public BaseResult update(T entity, HttpSession session) {
+	@PostMapping(value = "update", consumes = "application/json")
+	public BaseResult update(@RequestBody T entity, HttpSession session) {
 		if (session.getAttribute("user") != null) {
 			ScUser user = (ScUser) session.getAttribute("user");
-			entity.setCreateUser(user.getCode());
+			entity.setUpdateUser(user.getCode());
 		}
 		return service.update(entity);
 	}

@@ -26,7 +26,6 @@ public class ScUserTest {
 	@Autowired
 	private IScUserService service;
 
-	@Test
 	public void insert() {
 		ScUser entity = new ScUser();
 		entity.setUid(CodeHelper.getUUID());
@@ -59,6 +58,14 @@ public class ScUserTest {
 
 	public void del() {
 		BaseResult result = service.delete("SU1077022534957789184");
+		System.out.println(JSON.toJSON(result));
+	}
+
+	@Test
+	public void vertify() {
+		ScUser entity = new ScUser();
+		entity.setUserName("test");
+		BaseResult result = service.insert(entity);
 		System.out.println(JSON.toJSON(result));
 	}
 }

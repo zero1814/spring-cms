@@ -20,19 +20,19 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">名称</label>
 				<div class="layui-input-inline">
-					<input name="name" lay-verify="required" autocomplete="off" class="layui-input" type="text">
+					<input id="name" name="name" lay-verify="required" autocomplete="off" class="layui-input" type="text">
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">手机号</label>
 				<div class="layui-input-inline">
-					<input name="phone" lay-verify="phone" autocomplete="off" class="layui-input" type="text">
+					<input id="phone" name="phone" lay-verify="phone" autocomplete="off" class="layui-input" type="text">
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">邮箱地址</label>
 				<div class="layui-input-inline">
-					<input name="email" lay-verify="email"  autocomplete="off" class="layui-input" type="text">
+					<input id="email" name="email" lay-verify="email"  autocomplete="off" class="layui-input" type="text">
 				</div>
 			</div>
 			<div class="layui-form-item">
@@ -73,6 +73,8 @@
 			var postData = {
 				"code":field.code,
 				"type": field.type,
+				"phone": field.phone,
+				"email": field.email,
 				"status":field.status,
 				"extend":{
 					"realName":field.name

@@ -31,6 +31,11 @@ public class ScUserDto extends BaseDto {
 	private String phone;
 
 	/**
+	 * 电子邮箱
+	 */
+	private String email;
+
+	/**
 	 * 类型
 	 */
 	private String type;
@@ -39,6 +44,14 @@ public class ScUserDto extends BaseDto {
 	 * 状态
 	 */
 	private String status;
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	public String getPassword() {
 		return password;

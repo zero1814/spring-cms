@@ -32,8 +32,8 @@
 		</collection>
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, uid, code, user_name, password, phone, email,type,
-		status,
+		id, uid, `code`, user_name, password, phone, email,type,
+		`status`,
 		create_user,
 		DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as
 		create_time,
@@ -50,10 +50,13 @@
 		u.`password`,
 		u.phone,
 		u.email,
+		u.type,
+		u.`status`,
 		ue.real_name
 		FROM
 		sc_user AS u
-		LEFT JOIN sc_user_extends AS ue ON u.`code` = ue.`code`
+		LEFT JOIN sc_user_extends AS ue ON u.`code` =
+		ue.`code`
 		<where>
 			u.`code` = #{code,jdbcType=VARCHAR}
 		</where>
@@ -68,6 +71,18 @@
 			<if test="userName != null and userName != '' ">
 				AND user_name = #{userName,jdbcType=VARCHAR}
 			</if>
+		</where>
+	</select>
+	<!-- 验证用户是否已存在 -->
+	<select id="verify" parameterType="org.dto.system.ScUserDto"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sc_user
+		<where>
+			user_name = #{userName,jdbcType=VARCHAR}
+			OR email = #{email,jdbcType=VARCHAR}
+			OR phone = #{phone,jdbcType=VARCHAR}
 		</where>
 	</select>
 	<select id="login" resultMap="BaseResultMap"

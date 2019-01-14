@@ -11,6 +11,8 @@ import org.mapper.system.ScSettingMapper;
 import org.mapper.system.ScUserExtendsMapper;
 import org.mapper.system.ScUserMapper;
 import org.service.system.IScUserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,8 @@ import zero.commons.basics.result.ResultType;
 @Service
 public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScUserDto> implements IScUserService {
 
+	private static Logger logger = LoggerFactory.getLogger(ScUserServiceImpl.class);
+
 	@Autowired
 	private ScUserMapper mapper;
 
@@ -45,15 +49,55 @@ public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScU
 
 	@Value("${system.password}")
 	private String defaultPassword;
-	
+
 	@Value("${system.user.type}")
 	private String typeCode;
 
 	@Value("${system.user.status}")
 	private String statusCode;
 
+	/**
+	 * 
+	 * 方法: insert <br>
+	 * 
+	 * @param entity
+	 * @return
+	 * @see org.zero.spring.mybatis.BaseServiceImpl#insert(org.zero.spring.mybatis.BaseEntity)
+	 */
 	@Override
 	public BaseResult insert(ScUser entity) {
+		BaseResult result = new BaseResult();
+
+		if (StringUtils.isBlank(entity.getExtend().getRealName())) {
+			result.setCode(ResultType.ERROR);
+			result.setMessage("姓名不能为空");
+			return result;
+		} else if (StringUtils.isBlank(entity.getPhone())) {
+			result.setCode(ResultType.ERROR);
+			result.setMessage("手机号不能为空");
+			return result;
+		} else if (StringUtils.isBlank(entity.getEmail())) {
+			result.setCode(ResultType.ERROR);
+			result.setMessage("电子邮箱不能为空");
+			return result;
+		}
+
+		String userName = Pinyin4jUtil.converterToSpell(entity.getExtend().getRealName());
+		// 查询用户是否已存在
+		ScUserDto dto = new ScUserDto();
+		dto.setPhone(entity.getPhone());
+		dto.setEmail(entity.getEmail());
+		dto.setUserName(userName);
+		ScUser user = mapper.verify(dto);
+		if (user != null) {
+			result.setCode(ResultType.ERROR);
+			result.setMessage("用户已存在，请重新添加");
+			return result;
+		}
+
+		/**
+		 * 添加用户
+		 */
 		String createTime = DateUtil.curSystemTime();
 		entity.setCreateTime(createTime);
 		if (entity.getExtend() != null) {
@@ -64,10 +108,42 @@ public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScU
 			extend.setCreateTime(createTime);
 			extendsMapper.insert(entity.getExtend());
 		}
-		String userName = Pinyin4jUtil.converterToFirstSpell(entity.getExtend().getRealName());
 		entity.setUserName(userName);
 		entity.setPassword(MD5Util.md5Hex(defaultPassword));
 		return super.insert(entity);
+	}
+
+	@Override
+	public BaseResult update(ScUser entity) {
+		logger.info("开始执行update(T entity)方法");
+		BaseResult result = new BaseResult();
+		if (entity == null) {
+			result.setCode(ResultType.ERROR);
+			result.setMessage("参数对象不能为空");
+			return result;
+		}
+		try {
+			ScUser t = mapper.select(entity.getCode());
+			if (t == null) {
+				result.setCode(ResultType.NULL);
+				result.setMessage("对象不存在");
+				return result;
+			}
+			if (StringUtils.isBlank(entity.getUpdateTime())) {
+				entity.setUpdateTime(DateUtil.curSystemTime());
+			}
+			mapper.update(entity);
+			result.setCode(ResultType.SUCCESS);
+			result.setMessage("执行编辑方法成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.setCode(ResultType.ERROR);
+			result.setMessage("执行update(T entity)报错");
+			logger.error("执行update(T entity)报错，错误原因：" + e.getMessage());
+		} finally {
+			logger.info("执行update(T entity)方法结束");
+		}
+		return result;
 	}
 
 	/**

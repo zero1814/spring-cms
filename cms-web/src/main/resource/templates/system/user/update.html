@@ -20,7 +20,7 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">名称</label>
 				<div class="layui-input-inline">
-					<input th:attr="value=${user.extend.realName}" name="name" lay-verify="required" autocomplete="off" class="layui-input" type="text">
+					<input disabled="disabled" th:attr="value=${user.extend.realName}" name="name" lay-verify="required" autocomplete="off" class="layui-input" type="text">
 				</div>
 			</div>
 			<div class="layui-form-item">
@@ -38,16 +38,16 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">类型</label>
 				<div class="layui-input-inline">
-					<select name="type" lay-filter="required" lay-search th:field="*{user.type}">
+					<select name="type" lay-filter="required" lay-search>
 						<option value="">请选择</option>
-						<option th:selected="${user.type == t.code}"  th:attr="value=${t.code}" th:text="${t.name}"></option>
+						<option th:selected="${user.type == t.code}" th:each="t : ${type}" th:attr="value=${t.code}" th:text="${t.name}"></option>
 					</select>
 				</div>
 			</div>
 			<div class="layui-form-item">
 				<label class="layui-form-label">状态</label>
 				<div class="layui-input-inline">
-					<select name="status" lay-filter="required" lay-search th:field="*{user.status}">
+					<select name="status" lay-filter="required" lay-search>
 						<option value="">请选择</option>
 						<option th:selected="${user.status == s.code}" th:each="s : ${status}" th:attr="value=${s.code}" th:text="${s.name}"></option>
 					</select>
@@ -73,14 +73,13 @@
 			var postData = {
 				"code":field.code,
 				"type": field.type,
-				"status":field.status,
-				"extend":{
-					"realName":field.name
-				}
-			}
+				"phone": field.phone,
+				"email": field.email,
+				"status":field.status
+			    }
          		$.ajax({
             		type: "POST",
-            		url: "/system/user/insert",
+            		url: "/system/user/update",
            	 		dataType: "json",
            	 		data: JSON.stringify(postData),
            	 		contentType: "application/json;charset=utf-8",
