@@ -121,9 +121,9 @@
 					case 'insert':
 						layer.open({
 							type: 2,
-							title: "添加商品",
-							content: 'html/system/admin/add.html',
-							area: ['460px', '330px']
+							title: "添加菜单",
+							content: '/system/menu/index/insert',
+							area: ['460px', '400px']
 						});
 						break;
 				};
@@ -133,16 +133,38 @@
 			table.on('tool(data)', function(obj) {
 				var data = obj.data;
 				if(obj.event === 'del') {
-					layer.confirm('确定要删除此用户吗？', function(index) {
-						obj.del();
-						layer.close(index);
+					layer.confirm('确定要删除此菜单吗？', function(index) {
+					$.ajax({
+						type: "GET",
+						url: "/system/menu/del/"+data.code,
+						dataType: "json",
+						data: {},
+						contentType: "application/json;charset=utf-8",
+						success: function(res){
+							layer.msg(res.message,{time:1000},function(){
+								layui.table.reload("data", {
+									page: {
+										curr: 1
+									},
+									where: {
+										key: {
+											id: "#data"
+										}
+									}
+								})
+							});
+						},
+						error: function(res){
+							layer.alert("error:"+JSON.stringify(res));		            		
+						}
+					});
 					});
 				} else if(obj.event === 'edit') {
 					layer.open({
 						type: 2,
-						title: "编辑商品",
-						content: 'html/system/admin/edit.html',
-						area: ['460px', '330px']
+						title: "编辑菜单",
+						content: '/system/menu/update/'+data.code,
+						area: ['460px', '400px']
 					});
 				}
 			});

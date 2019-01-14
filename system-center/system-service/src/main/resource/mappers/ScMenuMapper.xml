@@ -111,7 +111,8 @@
 		</set>
 		where `code` = #{code,jdbcType=VARCHAR}
 	</update>
-	<select id="navs" resultMap="BaseResultMap" parameterType="java.lang.String">
+	<select id="navs" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
 		select
 		`code`,parent_code,name,link_url from sc_menu
 		where `status` = #{status,jdbcType=VARCHAR}
@@ -147,5 +148,10 @@
 				CONCAT('%',#{parentName,jdbcType=VARCHAR},'%')
 			</if>
 		</where>
+	</select>
+	<select id="selectAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from sc_menu
 	</select>
 </mapper>

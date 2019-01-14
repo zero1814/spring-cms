@@ -28,15 +28,26 @@ public interface IScMenuService extends IBaseService<ScMenu, ScMenuDto> {
 	 * @return
 	 */
 	DataResult<ScMenu> navs();
-	
-	
+
 	/**
 	 * 
 	 * 方法: status <br>
 	 * 描述: 获取菜单状态列表 <br>
 	 * 作者: zhy<br>
 	 * 时间: 2018年12月25日 下午3:04:34
+	 * 
 	 * @return
 	 */
 	List<ScSetting> status();
+
+	/**
+	 * 
+	 * 方法: parent <br>
+	 * 描述: 获取可选的所有菜单父级 <br>
+	 * 作者: zhy<br>
+	 * 时间: 2019年1月14日 下午4:22:54
+	 * 
+	 * @return
+	 */
+	List<ScMenu> parent();
 }

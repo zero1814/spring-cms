@@ -99,4 +99,9 @@ public class ScMenuServiceImpl extends BaseServiceImpl<ScMenu, ScMenuMapper, ScM
 		dto.setParentCode(statusCode);
 		return settingMapper.selectAll(dto);
 	}
+
+	@Override
+	public List<ScMenu> parent() {
+		return mapper.selectAll(new ScMenuDto());
+	}
 }
