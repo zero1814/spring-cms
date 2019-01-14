@@ -38,7 +38,7 @@ public class ScMenuController extends BaseController<ScMenu, ScMenuDto, IScMenuS
 	@GetMapping("index/insert")
 	public ModelAndView insertIndex() {
 		ModelAndView view = new ModelAndView("system/menu/insert");
-		String code = CodeHelper.getCode("SU");
+		String code = CodeHelper.getCode("SM");
 		view.addObject("parent", service.parent());
 		view.addObject("status", service.status());
 		view.addObject("code", code);

@@ -122,7 +122,12 @@
 				var checkStatus = table.checkStatus(obj.config.id);
 				switch(obj.event) {
 					case 'insert':
-					    window.open("/system/timetask/index/insert", "_self");
+						layer.open({
+							type: 2,
+							title: "添加定时任务",
+							content: '/system/timetask/index/insert',
+							area: ['500px', '550px']
+						});
 						break;
 				};
 			});
@@ -132,12 +137,39 @@
 				var data = obj.data;
 				console.log(JSON.stringify(obj));
 				if(obj.event === 'del') {
-					layer.confirm('确定要删除此用户吗？', function(index) {
-						obj.del();
-						layer.close(index);
+					layer.confirm('确定要删除此定时任务吗？', function(index) {
+						$.ajax({
+							type: "GET",
+							url: "/system/timetask/del/"+data.code,
+							dataType: "json",
+							data: {},
+							contentType: "application/json;charset=utf-8",
+							success: function(res){
+								layer.msg(res.message,{time:1000},function(){
+									layui.table.reload("data", {
+										page: {
+											curr: 1
+										},
+										where: {
+											key: {
+												id: "#data"
+											}
+										}
+									})
+								});
+							},
+							error: function(res){
+								layer.alert("error:"+JSON.stringify(res));		            		
+							}
+						});
 					});
 				} else if(obj.event === 'edit') {
-					window.open("/system/timetask/index/update/"+data.code, "_self");
+					layer.open({
+						type: 2,
+						title: "编辑商品",
+						content: '/system/timetask/update/'+data.code,
+						area: ['500px', '550px']
+					});
 				}
 			});
 

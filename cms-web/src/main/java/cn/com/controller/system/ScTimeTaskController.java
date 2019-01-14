@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.controller.BaseController;
+import zero.commons.basics.helper.CodeHelper;
 import zero.commons.basics.result.EntityResult;
 import zero.commons.basics.result.ResultType;
 
@@ -31,18 +32,20 @@ public class ScTimeTaskController extends BaseController<ScTimeTask, ScTimeTaskD
 	@RequestMapping("index/insert")
 	public ModelAndView insert() {
 		ModelAndView view = new ModelAndView("system/timetask/insert");
+		String code = CodeHelper.getCode("STT");
+		view.addObject("code", code);
 		view.addObject("type", service.types());
 		view.addObject("status", service.status());
 		return view;
 	}
 
-	@RequestMapping("index/update/{code}")
+	@RequestMapping("update/{code}")
 	public ModelAndView update(@PathVariable("code") String code) {
 		ModelAndView view = new ModelAndView();
 		EntityResult<ScTimeTask> result = service.select(code);
 		if (result.getCode() == ResultType.SUCCESS) {
 			view.setViewName("system/timetask/update");
-			view.addObject("entity", result.getEntity());
+			view.addObject("task", result.getEntity());
 			view.addObject("type", service.types());
 			view.addObject("status", service.status());
 		} else if (result.getCode() == ResultType.NULL) {

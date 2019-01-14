@@ -31,7 +31,7 @@ public class ScRoleController extends BaseController<ScRole, ScRoleDto, IScRoleS
 	@GetMapping("index/insert")
 	public ModelAndView insertIndex() {
 		ModelAndView view = new ModelAndView("system/role/insert");
-		String code = CodeHelper.getCode("SU");
+		String code = CodeHelper.getCode("SR");
 		view.addObject("code", code);
 		return view;
 	}
