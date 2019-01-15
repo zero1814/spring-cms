@@ -51,4 +51,17 @@ public interface IScUserService extends IBaseService<ScUser, ScUserDto> {
 	 * @return
 	 */
 	EntityResult<ScUser> login(ScUserDto dto);
+
+	/**
+	 * 
+	 * 方法: updatePassword <br>
+	 * 描述: 修改密码 <br>
+	 * 作者: zhy<br>
+	 * 时间: 2019年1月15日 下午3:34:05
+	 * 
+	 * @param entity
+	 * @param password
+	 * @return
+	 */
+	EntityResult<ScUser> updatePassword(ScUser entity, String password);
 }

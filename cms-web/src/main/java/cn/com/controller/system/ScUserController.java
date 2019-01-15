@@ -1,6 +1,7 @@
 package cn.com.controller.system;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.dto.system.ScUserDto;
 import org.entity.system.ScUser;
@@ -10,9 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.alibaba.fastjson.JSONObject;
 
 import cn.com.controller.BaseController;
 import zero.commons.basics.helper.CodeHelper;
@@ -69,8 +74,27 @@ public class ScUserController extends BaseController<ScUser, ScUserDto, IScUserS
 		return view;
 	}
 
+	@GetMapping("update/password")
+	public ModelAndView updatePasswordIndex(HttpSession session) {
+		ModelAndView view = new ModelAndView();
+		ScUser user = (ScUser) session.getAttribute("user");
+		if (user != null) {
+			view.setViewName("system/user/password");
+			view.addObject("user", user);
+		} else {
+			view.setViewName("error/404");
+		}
+		return view;
+	}
+
+	@PostMapping(value = "update/password", consumes = "application/json")
+	public BaseResult updatePassword(HttpSession session, @RequestBody JSONObject password) {
+		ScUser user = (ScUser) session.getAttribute("user");
+		return service.updatePassword(user, password.getString("password"));
+	}
+
 	@RequestMapping("header/upload")
 	public BaseResult uploadHeader(HttpServletRequest request) {
-		return fileService.upload(request, headerPath,headerUrl);
+		return fileService.upload(request, headerPath, headerUrl);
 	}
 }

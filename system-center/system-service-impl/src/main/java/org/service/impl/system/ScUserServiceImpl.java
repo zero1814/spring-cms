@@ -183,6 +183,14 @@ public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScU
 		return settingMapper.selectAll(dto);
 	}
 
+	/**
+	 * 
+	 * 方法: login <br>
+	 * 
+	 * @param dto
+	 * @return
+	 * @see org.service.system.IScUserService#login(org.dto.system.ScUserDto)
+	 */
 	@Override
 	public EntityResult<ScUser> login(ScUserDto dto) {
 		EntityResult<ScUser> result = new EntityResult<ScUser>();
@@ -209,6 +217,14 @@ public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScU
 		return result;
 	}
 
+	/**
+	 * 
+	 * 方法: delete <br>
+	 * 
+	 * @param code
+	 * @return
+	 * @see org.zero.spring.mybatis.BaseServiceImpl#delete(java.lang.String)
+	 */
 	@Override
 	public BaseResult delete(String code) {
 		ScUserExtends extend = extendsMapper.select(code);
@@ -216,6 +232,57 @@ public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScU
 			extendsMapper.delete(code);
 		}
 		return super.delete(code);
+	}
+
+	/**
+	 * 
+	 * 方法: updatePassword <br>
+	 * 
+	 * @param entity
+	 * @param password
+	 * @return
+	 * @see org.service.system.IScUserService#updatePassword(org.entity.system.ScUser,
+	 *      java.lang.String)
+	 */
+	@Override
+	public EntityResult<ScUser> updatePassword(ScUser entity, String password) {
+		EntityResult<ScUser> result = new EntityResult<ScUser>();
+		if (entity == null) {
+			result.setCode(ResultType.NULL);
+			result.setMessage("用户不存在");
+			return result;
+		}
+		if (StringUtils.isBlank(password)) {
+			result.setCode(ResultType.NULL);
+			result.setMessage("密码不能为空");
+			return result;
+		}
+		// 密码MD5转码
+		password = MD5Util.md5Hex(password);
+		if (StringUtils.equals(password, entity.getPassword())) {
+			result.setCode(ResultType.ERROR);
+			result.setMessage("密码不能与原密码相同");
+			return result;
+		}
+		logger.info("用户'" + entity.getExtend().getRealName() + "'，进行密码修改");
+		try {
+			ScUser updateEntity = new ScUser();
+			updateEntity.setCode(entity.getCode());
+			updateEntity.setPassword(password);
+			updateEntity.setUpdateUser(entity.getCode());
+			updateEntity.setUpdateTime(DateUtil.curSystemTime());
+			mapper.update(updateEntity);
+			logger.info("用户'" + entity.getExtend().getRealName() + "'，密码修改完成，原密码：" + entity.getPassword() + ",新密码："
+					+ password);
+			ScUser user = mapper.select(entity.getCode());
+			result.setCode(ResultType.SUCCESS);
+			result.setEntity(user);
+			result.setMessage("密码修改完成");
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("用户'" + entity.getExtend().getRealName() + "'，密码修改报错，错误原因：" + e.getMessage());
+		}
+		return result;
 	}
 
 }

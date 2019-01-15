@@ -121,9 +121,20 @@ layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery'], function() {
 		window.sessionStorage.removeItem("menu");
 		window.sessionStorage.removeItem("curmenu");
 	}
+	
+	//修改密码
+	$('#update-password').on('click', function() {
+		layer.open({
+			type: 2,
+			title: "修改密码",
+			content: '/system/user/update/password',
+			area: ['460px', '300px']
+		});
+	});
 })
 
 //打开新窗口
 function addTab(_this) {
 	tab.tabAdd(_this);
 }
+
