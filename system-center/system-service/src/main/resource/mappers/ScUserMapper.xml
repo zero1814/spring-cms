@@ -97,7 +97,8 @@
 		u.user_name,
 		u.`password`,
 		u.phone,
-		ue.real_name
+		ue.real_name,
+		ue.header_pic
 		FROM
 		sc_user AS u
 		LEFT JOIN sc_user_extends AS ue ON u.`code` = ue.`code`
