@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.zero.spring.mybatis.BaseServiceImpl;
 
 import zero.commons.basics.StringUtils;
+import zero.commons.basics.result.BaseResult;
 import zero.commons.basics.result.DataResult;
 import zero.commons.basics.result.ResultType;
 
@@ -47,6 +48,29 @@ public class ScSettingServiceImpl extends BaseServiceImpl<ScSetting, ScSettingMa
 			result.setCode(ResultType.NULL);
 			result.setMessage("查询系统配置信息错误，错误原因：" + e.getMessage());
 		}
+		return result;
+	}
+
+	/**
+	 * 
+	 * 方法: delete <br>
+	 * 
+	 * @param code
+	 * @return
+	 * @see org.zero.spring.mybatis.BaseServiceImpl#delete(java.lang.String)
+	 */
+	@Override
+	public BaseResult delete(String code) {
+		BaseResult result = new BaseResult();
+		ScSettingDto dto = new ScSettingDto();
+		dto.setParentCode(code);
+		List<ScSetting> children = mapper.selectAll(dto);
+		if (children != null && children.size() > 0) {
+			result.setCode(ResultType.ERROR);
+			result.setMessage("对象包含子数据无法删除");
+			return result;
+		}
+		result = super.delete(code);
 		return result;
 	}
 

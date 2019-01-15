@@ -32,9 +32,9 @@
 			</div>
 			<div class="layui-form-item">
 				<div class="operation-btn layui-input-block">
-					<button type="button" class="layui-btn" data-type="update">编辑</button>
+					<button th:if="${entity.code != '0'}" type="button" class="layui-btn" data-type="update">编辑</button>
 					<button type="button" class="layui-btn layui-btn-primary" data-type="insert">添加子节点</button>
-					<button type="button" class="layui-btn layui-btn-danger" data-type="del">删除</button>
+					<button th:if="${entity.code != '0'}" type="button" class="layui-btn layui-btn-danger" data-type="del">删除</button>
 				</div>
 			</div>
 		</div>

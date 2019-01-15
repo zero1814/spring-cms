@@ -31,6 +31,7 @@ public class ScSettingTest {
 		service.insert(entity);
 	}
 
+	@Test
 	public void insertUserType() {
 		ScSetting entity0 = new ScSetting();
 		entity0.setUid(CodeHelper.getUUID());
@@ -39,37 +40,37 @@ public class ScSettingTest {
 		entity0.setCreateUser("insert");
 		service.insert(entity0);
 
-		ScSetting entity = new ScSetting();
-		entity.setUid(CodeHelper.getUUID());
-		entity.setCode(CodeHelper.getCode("SS"));
-		entity.setParentCode(entity0.getCode());
-		entity.setName("用户类型");
-		entity.setCreateUser("insert");
-		service.insert(entity);
-
-		ScSetting entity1 = new ScSetting();
-		entity1.setUid(CodeHelper.getUUID());
-		entity1.setCode(CodeHelper.getCode("SS"));
-		entity1.setParentCode(entity.getCode());
-		entity1.setName("商户管理员");
-		entity1.setCreateUser("insert");
-		service.insert(entity1);
-
-		ScSetting entity2 = new ScSetting();
-		entity2.setUid(CodeHelper.getUUID());
-		entity2.setCode(CodeHelper.getCode("SS"));
-		entity2.setParentCode(entity.getCode());
-		entity2.setName("系统管理员");
-		entity2.setCreateUser("insert");
-		service.insert(entity2);
-
-		ScSetting entity3 = new ScSetting();
-		entity3.setUid(CodeHelper.getUUID());
-		entity3.setCode(CodeHelper.getCode("SS"));
-		entity3.setParentCode(entity.getCode());
-		entity3.setName("超级管理员");
-		entity3.setCreateUser("insert");
-		service.insert(entity3);
+//		ScSetting entity = new ScSetting();
+//		entity.setUid(CodeHelper.getUUID());
+//		entity.setCode(CodeHelper.getCode("SS"));
+//		entity.setParentCode(entity0.getCode());
+//		entity.setName("用户类型");
+//		entity.setCreateUser("insert");
+//		service.insert(entity);
+//
+//		ScSetting entity1 = new ScSetting();
+//		entity1.setUid(CodeHelper.getUUID());
+//		entity1.setCode(CodeHelper.getCode("SS"));
+//		entity1.setParentCode(entity.getCode());
+//		entity1.setName("商户管理员");
+//		entity1.setCreateUser("insert");
+//		service.insert(entity1);
+//
+//		ScSetting entity2 = new ScSetting();
+//		entity2.setUid(CodeHelper.getUUID());
+//		entity2.setCode(CodeHelper.getCode("SS"));
+//		entity2.setParentCode(entity.getCode());
+//		entity2.setName("系统管理员");
+//		entity2.setCreateUser("insert");
+//		service.insert(entity2);
+//
+//		ScSetting entity3 = new ScSetting();
+//		entity3.setUid(CodeHelper.getUUID());
+//		entity3.setCode(CodeHelper.getCode("SS"));
+//		entity3.setParentCode(entity.getCode());
+//		entity3.setName("超级管理员");
+//		entity3.setCreateUser("insert");
+//		service.insert(entity3);
 
 	}
 
@@ -197,7 +198,6 @@ public class ScSettingTest {
 		service.insert(entity3);
 	}
 
-	@Test
 	public void tree() {
 		ScSettingDto dto = new ScSettingDto();
 		DataResult<ScSetting> data = service.tree(dto);
