@@ -132,6 +132,15 @@ public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScU
 			if (StringUtils.isBlank(entity.getUpdateTime())) {
 				entity.setUpdateTime(DateUtil.curSystemTime());
 			}
+			if (entity.getExtend() != null) {
+				ScUserExtends user = extendsMapper.select(entity.getCode());
+				if (user != null) {
+					entity.getExtend().setCode(entity.getCode());
+					entity.getExtend().setUpdateUser(entity.getUpdateUser());
+					entity.getExtend().setUpdateTime(entity.getUpdateTime());
+					extendsMapper.update(entity.getExtend());
+				}
+			}
 			mapper.update(entity);
 			result.setCode(ResultType.SUCCESS);
 			result.setMessage("执行编辑方法成功");
@@ -199,4 +208,14 @@ public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScU
 		result.setMessage("登录成功");
 		return result;
 	}
+
+	@Override
+	public BaseResult delete(String code) {
+		ScUserExtends extend = extendsMapper.select(code);
+		if (extend != null) {
+			extendsMapper.delete(code);
+		}
+		return super.delete(code);
+	}
+
 }

@@ -3,6 +3,9 @@ system:
   password: 123456
   #用户相关配置
   user:
+    header:
+      path: d:/image/header/
+      url: http://localhost:8080/image/header/
     #用户状态父级编码
     status: SS1077457857042968576
     #用户类型父级编码

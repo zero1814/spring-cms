@@ -18,6 +18,19 @@ public class ScUserExtends extends BaseEntity {
 	 */
 	private String realName;
 
+	/**
+	 * 头像
+	 */
+	private String headerPic;
+
+	public String getHeaderPic() {
+		return headerPic;
+	}
+
+	public void setHeaderPic(String headerPic) {
+		this.headerPic = headerPic;
+	}
+
 	public String getRealName() {
 		return realName;
 	}

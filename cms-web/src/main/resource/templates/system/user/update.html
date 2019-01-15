@@ -20,6 +20,19 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">名称</label>
 				<div class="layui-input-inline">
+					<div class="layui-upload">
+					  <div class="layui-upload-list">
+					    <img style="width:80px;height:80px;" class="layui-upload-img" id="user_header" th:attr="src=${user.extend.headerPic}">
+					    <p id="user_header_path"></p>
+					    <input type="hidden" name="headerPic" id="headerPic" th:attr="value=${user.extend.headerPic}">
+					  </div>
+					  <button type="button" class="layui-btn" id="upload_header">上传图像</button>
+					</div>   
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">名称</label>
+				<div class="layui-input-inline">
 					<input disabled="disabled" th:attr="value=${user.extend.realName}" name="name" lay-verify="required" autocomplete="off" class="layui-input" type="text">
 				</div>
 			</div>
@@ -64,9 +77,10 @@
 	</body>
 	<script th:src="@{/plugins/layui/2.4.5/layui.js}"></script>
 	<script type="text/javascript">
-		layui.use(["form", "jquery"], function() {
+		layui.use(["form", "jquery","upload"], function() {
 			var index = parent.layer.getFrameIndex(window.name);
 			var form = layui.form;
+			var upload = layui.upload;
 			//监听提交
 			form.on('submit(submit)', function(data) {
 			var field = data.field;
@@ -75,7 +89,10 @@
 				"type": field.type,
 				"phone": field.phone,
 				"email": field.email,
-				"status":field.status
+				"status":field.status,
+				"extend":{
+					"headerPic":field.headerPic
+					}
 			    }
          		$.ajax({
             		type: "POST",
@@ -120,6 +137,32 @@
 						}
 					}
 				})
+			});
+			//头像上传
+			upload.render({
+				elem: '#upload_header',
+				url: '/system/user/header/upload',
+				//指定允许上传时校验的文件类型
+				accept: 'images',
+				//允许上传的文件后缀
+				exts: 'jpg|png|jpeg',
+				//设置文件最大可允许上传的大小，单位 KB。不支持ie8/9
+				size: 1024*10,
+				//设置同时可上传的文件数量
+				number: 1,
+				done: function(res){
+					console.log(JSON.stringify(res));
+					if(res.code == 'SUCCESS'){
+						$("#user_header").attr('src',res.url);
+						$("#headerPic").val(res.url);
+					}
+				},
+				choose: function(obj){
+					console.log(JSON.stringify(obj));
+				},
+				error: function(res){
+					console.log(JSON.stringify(res));
+				}
 			});
 		});
 	</script>

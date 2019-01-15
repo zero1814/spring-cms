@@ -29,6 +29,8 @@
 			javaType="org.entity.system.ScUserExtends">
 			<result column="real_name" property="realName"
 				jdbcType="VARCHAR" />
+			<result column="header_pic" property="headerPic"
+				jdbcType="VARCHAR" />
 		</collection>
 	</resultMap>
 	<sql id="Base_Column_List">
@@ -52,10 +54,12 @@
 		u.email,
 		u.type,
 		u.`status`,
-		ue.real_name
+		ue.real_name,
+		ue.header_pic
 		FROM
 		sc_user AS u
-		LEFT JOIN sc_user_extends AS ue ON u.`code` =
+		LEFT JOIN
+		sc_user_extends AS ue ON u.`code` =
 		ue.`code`
 		<where>
 			u.`code` = #{code,jdbcType=VARCHAR}
@@ -81,7 +85,8 @@
 		from sc_user
 		<where>
 			user_name = #{userName,jdbcType=VARCHAR}
-			OR email = #{email,jdbcType=VARCHAR}
+			OR email =
+			#{email,jdbcType=VARCHAR}
 			OR phone = #{phone,jdbcType=VARCHAR}
 		</where>
 	</select>

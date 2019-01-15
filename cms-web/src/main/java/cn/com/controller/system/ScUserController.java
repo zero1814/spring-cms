@@ -1,9 +1,13 @@
 package cn.com.controller.system;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.dto.system.ScUserDto;
 import org.entity.system.ScUser;
+import org.service.impl.system.FileService;
 import org.service.system.IScUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import cn.com.controller.BaseController;
 import zero.commons.basics.helper.CodeHelper;
+import zero.commons.basics.result.BaseResult;
 import zero.commons.basics.result.EntityResult;
 import zero.commons.basics.result.ResultType;
 
@@ -21,6 +26,13 @@ public class ScUserController extends BaseController<ScUser, ScUserDto, IScUserS
 
 	@Autowired
 	private IScUserService service;
+	@Autowired
+	private FileService fileService;
+
+	@Value("${system.user.header.path}")
+	private String headerPath;
+	@Value("${system.user.header.url}")
+	private String headerUrl;
 
 	@GetMapping("index")
 	public ModelAndView index() {
@@ -55,5 +67,10 @@ public class ScUserController extends BaseController<ScUser, ScUserDto, IScUserS
 			view.setViewName("error/404");
 		}
 		return view;
+	}
+
+	@RequestMapping("header/upload")
+	public BaseResult uploadHeader(HttpServletRequest request) {
+		return fileService.upload(request, headerPath,headerUrl);
 	}
 }
