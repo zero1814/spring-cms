@@ -1,7 +1,6 @@
 package org.entity.system;
 
 import org.zero.spring.mybatis.BaseEntity;
-import org.zero.spring.mybatis.annotation.Insert;
 
 /**
  * 
@@ -17,31 +16,36 @@ public class ScUser extends BaseEntity {
 	/**
 	 * 用户名
 	 */
-	@Insert(vertify = true, alert = "用户名不能为空")
 	private String userName;
+
+	/**
+	 * 真实姓名
+	 */
+	private String realName;
+
+	/**
+	 * 头像
+	 */
+	private String headerPic;
 
 	/**
 	 * 密码
 	 */
-	@Insert(vertify = true, alert = "密码不能为空")
 	private String password;
 
 	/**
 	 * 手机号
 	 */
-	@Insert(vertify = true, alert = "手机号不能为空")
 	private String phone;
 
 	/**
 	 * 电子邮箱
 	 */
-	@Insert(vertify = true, alert = "电子邮箱不能为空")
 	private String email;
 
 	/**
 	 * 类型
 	 */
-	@Insert(vertify = true, alert = "用户类型不能为空")
 	private String type;
 
 	private String typeName;
@@ -49,15 +53,9 @@ public class ScUser extends BaseEntity {
 	/**
 	 * 状态
 	 */
-	@Insert(vertify = true, alert = "用户状态不能为空")
 	private String status;
 
 	private String statusName;
-
-	/**
-	 * 用户扩展信息
-	 */
-	private ScUserExtends extend;
 
 	public String getTypeName() {
 		return typeName;
@@ -81,14 +79,6 @@ public class ScUser extends BaseEntity {
 
 	public void setType(String type) {
 		this.type = type;
-	}
-
-	public ScUserExtends getExtend() {
-		return extend;
-	}
-
-	public void setExtend(ScUserExtends extend) {
-		this.extend = extend;
 	}
 
 	public String getUserName() {
@@ -131,4 +121,19 @@ public class ScUser extends BaseEntity {
 		this.status = status;
 	}
 
+	public String getRealName() {
+		return realName;
+	}
+
+	public void setRealName(String realName) {
+		this.realName = realName;
+	}
+
+	public String getHeaderPic() {
+		return headerPic;
+	}
+
+	public void setHeaderPic(String headerPic) {
+		this.headerPic = headerPic;
+	}
 }

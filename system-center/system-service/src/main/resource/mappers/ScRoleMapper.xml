@@ -81,4 +81,65 @@
 			</if>
 		</where>
 	</select>
+	<!-- 根据角色编码查询角色下的所有用户列表 -->
+	<resultMap id="RoleUsers" type="org.entity.system.ScUser">
+		<result column="real_name" property="realName"
+			jdbcType="VARCHAR" />
+		<result column="type_name" property="typeName"
+			jdbcType="VARCHAR" />
+		<result column="status_name" property="statusName"
+			jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="findRoleUsers" parameterType="java.lang.String"
+		resultMap="RoleUsers">
+		SELECT
+		u.real_name,
+		t.`name` AS type_name,
+		s.`name` AS status_name,
+		DATE_FORMAT(ur.create_time,'%Y-%m-%d %H:%i:%s') as create_time
+		FROM
+		sc_user AS u
+		LEFT JOIN sc_setting AS t ON u.type = t.`code`
+		LEFT JOIN
+		sc_setting AS s ON u.`status` = s.`code`
+		LEFT JOIN sc_user_role AS ur
+		ON u.`code` = ur.user_code
+		LEFT JOIN sc_role AS r ON ur.role_code =
+		r.`code`
+		<where>
+			r.`code` = #{code,jdbcType=VARCHAR}
+			<if test="name != null and name != '' ">
+				AND u.real_name like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+			</if>
+		</where>
+	</select>
+	<!-- 根据角色编码查询角色下的所有菜单列表 -->
+	<resultMap id="RoleMenus" type="org.entity.system.ScMenu">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="status_name" property="statusName"
+			jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<select id="findRoleMenus" parameterType="java.lang.String"
+		resultMap="RoleMenus">
+		SELECT
+		m.`name`,
+		s.`name` as status_name,
+		DATE_FORMAT(rm.create_time,'%Y-%m-%d %H:%i:%s') as create_time
+		FROM
+		sc_menu AS m
+		LEFT JOIN sc_setting as s ON m.`status` = s.`code`
+		LEFT JOIN sc_role_menu AS rm ON m.`code` = rm.menu_code
+		LEFT JOIN sc_role AS r ON rm.role_code = r.`code`
+		<where>
+			r.`code` = #{code,jdbcType=VARCHAR}
+			<if test="name != null and name != '' ">
+				AND m.`name` like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+			</if>
+		</where>
+	</select>
 </mapper>

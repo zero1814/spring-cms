@@ -4,6 +4,7 @@ system:
   #用户相关配置
   user:
     header:
+      default: http://localhost:8080/image/header/default.jpg
       path: d:/image/header/
       url: http://localhost:8080/image/header/
     #用户状态父级编码

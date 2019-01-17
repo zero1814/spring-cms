@@ -1,7 +1,6 @@
 package cn.com.system;
 
 import org.entity.system.ScUser;
-import org.entity.system.ScUserExtends;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.service.system.IScUserService;
@@ -26,6 +25,7 @@ public class ScUserTest {
 	@Autowired
 	private IScUserService service;
 
+	@Test
 	public void insert() {
 		ScUser entity = new ScUser();
 		entity.setUid(CodeHelper.getUUID());
@@ -37,9 +37,7 @@ public class ScUserTest {
 		entity.setCreateUser("insert");
 		entity.setType("1");
 		entity.setStatus("1");
-		ScUserExtends extend = new ScUserExtends();
-		extend.setRealName("李四");
-		entity.setExtend(extend);
+		entity.setRealName("李四");
 		service.insert(entity);
 	}
 
@@ -61,7 +59,6 @@ public class ScUserTest {
 		System.out.println(JSON.toJSON(result));
 	}
 
-	@Test
 	public void vertify() {
 		ScUser entity = new ScUser();
 		entity.setUserName("test");

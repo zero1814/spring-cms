@@ -25,16 +25,14 @@
 			jdbcType="VARCHAR" />
 		<result column="update_time" property="updateTime"
 			jdbcType="VARCHAR" />
-		<collection property="extend"
-			javaType="org.entity.system.ScUserExtends">
-			<result column="real_name" property="realName"
-				jdbcType="VARCHAR" />
-			<result column="header_pic" property="headerPic"
-				jdbcType="VARCHAR" />
-		</collection>
+		<result column="real_name" property="realName"
+			jdbcType="VARCHAR" />
+		<result column="header_pic" property="headerPic"
+			jdbcType="VARCHAR" />
 	</resultMap>
 	<sql id="Base_Column_List">
-		id, uid, `code`, user_name, password, phone, email,type,
+		id, uid, `code`, user_name, real_name,header_pic,password,
+		phone, email,type,
 		`status`,
 		create_user,
 		DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as
@@ -54,13 +52,10 @@
 		u.email,
 		u.type,
 		u.`status`,
-		ue.real_name,
-		ue.header_pic
+		u.real_name,
+		u.header_pic
 		FROM
 		sc_user AS u
-		LEFT JOIN
-		sc_user_extends AS ue ON u.`code` =
-		ue.`code`
 		<where>
 			u.`code` = #{code,jdbcType=VARCHAR}
 		</where>
@@ -97,11 +92,10 @@
 		u.user_name,
 		u.`password`,
 		u.phone,
-		ue.real_name,
-		ue.header_pic
+		u.real_name,
+		u.header_pic
 		FROM
 		sc_user AS u
-		LEFT JOIN sc_user_extends AS ue ON u.`code` = ue.`code`
 		<where>
 			u.user_name = #{userName,jdbcType=VARCHAR}
 			AND u.`password` =
@@ -120,6 +114,8 @@
 			uid,
 			code,
 			user_name,
+			real_name,
+			header_pic,
 			password,
 			phone,
 			email,
@@ -134,6 +130,8 @@
 			#{uid,jdbcType=VARCHAR},
 			#{code,jdbcType=VARCHAR},
 			#{userName,jdbcType=VARCHAR},
+			#{realName,jdbcType=VARCHAR},
+			#{headerPic,jdbcType=VARCHAR},
 			#{password,jdbcType=VARCHAR},
 			#{phone,jdbcType=VARCHAR},
 			#{email,jdbcType=VARCHAR},
@@ -149,7 +147,13 @@
 		update sc_user
 		<set>
 			<if test="password != null and password != '' ">
-				password = #{password,jdbcType=VARCHAR},
+				`password` = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="realName != null and realName != '' ">
+				real_name = #{realName,jdbcType=VARCHAR},
+			</if>
+			<if test="headerPic != null and headerPic != '' ">
+				header_pic = #{headerPic,jdbcType=VARCHAR},
 			</if>
 			<if test="phone != null and phone != '' ">
 				phone = #{phone,jdbcType=VARCHAR},
@@ -174,10 +178,12 @@
 		SELECT
 		u.`code`,
 		u.user_name,
+		u.real_name,
+		u.header_pic,
 		u.phone,
 		u.email,
 		u.`status`,
-		ue.real_name,
+		u.real_name,
 		t.`name` as type_name,
 		s.`name` as status_name,
 		DATE_FORMAT(u.create_time,'%Y-%m-%d %H:%i:%s') as
@@ -186,16 +192,8 @@
 		as
 		update_time
 		FROM
-		sc_user
-		AS u
-		LEFT JOIN sc_user_extends AS ue ON u.`code` =
-		ue.`code`
-		LEFT
-		JOIN
-		sc_setting as t ON u.type = t.`code`
-		LEFT JOIN
-		sc_setting as s ON
-		u.`status` = s.`code`
+		sc_user AS u LEFT JOIN sc_setting as t ON u.type = t.`code`
+		LEFT JOIN sc_setting as s ON u.`status` = s.`code`
 		<where>
 			u.uid is not null
 			<if test="userName != null and userName != '' ">

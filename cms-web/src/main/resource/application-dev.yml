@@ -66,3 +66,9 @@ spring:
 mybatis:
   mapperLocations: "classpath*:mappers/**/*.xml"
   typeAliasesPackage: org.system.entity
+
+#定时任务配置
+scheduled:
+  pool:
+    #线程池大小
+    size: 10

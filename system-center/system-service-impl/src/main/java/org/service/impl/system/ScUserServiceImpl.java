@@ -6,9 +6,7 @@ import org.dto.system.ScSettingDto;
 import org.dto.system.ScUserDto;
 import org.entity.system.ScSetting;
 import org.entity.system.ScUser;
-import org.entity.system.ScUserExtends;
 import org.mapper.system.ScSettingMapper;
-import org.mapper.system.ScUserExtendsMapper;
 import org.mapper.system.ScUserMapper;
 import org.service.system.IScUserService;
 import org.slf4j.Logger;
@@ -22,7 +20,6 @@ import zero.commons.basics.DateUtil;
 import zero.commons.basics.MD5Util;
 import zero.commons.basics.Pinyin4jUtil;
 import zero.commons.basics.StringUtils;
-import zero.commons.basics.helper.CodeHelper;
 import zero.commons.basics.result.BaseResult;
 import zero.commons.basics.result.EntityResult;
 import zero.commons.basics.result.ResultType;
@@ -44,8 +41,6 @@ public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScU
 
 	@Autowired
 	private ScSettingMapper settingMapper;
-	@Autowired
-	private ScUserExtendsMapper extendsMapper;
 
 	@Value("${system.password}")
 	private String defaultPassword;
@@ -55,6 +50,9 @@ public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScU
 
 	@Value("${system.user.status}")
 	private String statusCode;
+
+	@Value("${system.user.header.default}")
+	private String defaultHeaderPic;
 
 	/**
 	 * 
@@ -68,7 +66,7 @@ public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScU
 	public BaseResult insert(ScUser entity) {
 		BaseResult result = new BaseResult();
 
-		if (StringUtils.isBlank(entity.getExtend().getRealName())) {
+		if (StringUtils.isBlank(entity.getRealName())) {
 			result.setCode(ResultType.ERROR);
 			result.setMessage("姓名不能为空");
 			return result;
@@ -81,8 +79,11 @@ public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScU
 			result.setMessage("电子邮箱不能为空");
 			return result;
 		}
-
-		String userName = Pinyin4jUtil.converterToSpell(entity.getExtend().getRealName());
+		// 如果没有设置用户头像，取默认头像
+		if (StringUtils.isBlank(entity.getHeaderPic())) {
+			entity.setHeaderPic(defaultHeaderPic);
+		}
+		String userName = Pinyin4jUtil.converterToSpell(entity.getRealName());
 		// 查询用户是否已存在
 		ScUserDto dto = new ScUserDto();
 		dto.setPhone(entity.getPhone());
@@ -100,14 +101,6 @@ public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScU
 		 */
 		String createTime = DateUtil.curSystemTime();
 		entity.setCreateTime(createTime);
-		if (entity.getExtend() != null) {
-			ScUserExtends extend = entity.getExtend();
-			extend.setUid(CodeHelper.getUUID());
-			extend.setCode(entity.getCode());
-			extend.setCreateUser(entity.getCreateUser());
-			extend.setCreateTime(createTime);
-			extendsMapper.insert(entity.getExtend());
-		}
 		entity.setUserName(userName);
 		entity.setPassword(MD5Util.md5Hex(defaultPassword));
 		return super.insert(entity);
@@ -131,15 +124,6 @@ public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScU
 			}
 			if (StringUtils.isBlank(entity.getUpdateTime())) {
 				entity.setUpdateTime(DateUtil.curSystemTime());
-			}
-			if (entity.getExtend() != null) {
-				ScUserExtends user = extendsMapper.select(entity.getCode());
-				if (user != null) {
-					entity.getExtend().setCode(entity.getCode());
-					entity.getExtend().setUpdateUser(entity.getUpdateUser());
-					entity.getExtend().setUpdateTime(entity.getUpdateTime());
-					extendsMapper.update(entity.getExtend());
-				}
 			}
 			mapper.update(entity);
 			result.setCode(ResultType.SUCCESS);
@@ -219,23 +203,6 @@ public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScU
 
 	/**
 	 * 
-	 * 方法: delete <br>
-	 * 
-	 * @param code
-	 * @return
-	 * @see org.zero.spring.mybatis.BaseServiceImpl#delete(java.lang.String)
-	 */
-	@Override
-	public BaseResult delete(String code) {
-		ScUserExtends extend = extendsMapper.select(code);
-		if (extend != null) {
-			extendsMapper.delete(code);
-		}
-		return super.delete(code);
-	}
-
-	/**
-	 * 
 	 * 方法: updatePassword <br>
 	 * 
 	 * @param entity
@@ -264,7 +231,7 @@ public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScU
 			result.setMessage("密码不能与原密码相同");
 			return result;
 		}
-		logger.info("用户'" + entity.getExtend().getRealName() + "'，进行密码修改");
+		logger.info("用户'" + entity.getRealName() + "'，进行密码修改");
 		try {
 			ScUser updateEntity = new ScUser();
 			updateEntity.setCode(entity.getCode());
@@ -272,15 +239,14 @@ public class ScUserServiceImpl extends BaseServiceImpl<ScUser, ScUserMapper, ScU
 			updateEntity.setUpdateUser(entity.getCode());
 			updateEntity.setUpdateTime(DateUtil.curSystemTime());
 			mapper.update(updateEntity);
-			logger.info("用户'" + entity.getExtend().getRealName() + "'，密码修改完成，原密码：" + entity.getPassword() + ",新密码："
-					+ password);
+			logger.info("用户'" + entity.getRealName() + "'，密码修改完成，原密码：" + entity.getPassword() + ",新密码：" + password);
 			ScUser user = mapper.select(entity.getCode());
 			result.setCode(ResultType.SUCCESS);
 			result.setEntity(user);
 			result.setMessage("密码修改完成");
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("用户'" + entity.getExtend().getRealName() + "'，密码修改报错，错误原因：" + e.getMessage());
+			logger.error("用户'" + entity.getRealName() + "'，密码修改报错，错误原因：" + e.getMessage());
 		}
 		return result;
 	}

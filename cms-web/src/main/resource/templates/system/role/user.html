@@ -15,6 +15,7 @@
 	</head>
 
 	<body class="childrenBody">
+		<input type="hidden" id="code" name="code" th:attr="value=${code}" />
 		<div class="layui-row search-div" style="margin: 10px; padding: 10px;">
 			<div class="layui-form">
 				名称：
@@ -33,17 +34,7 @@
 			<button class="layui-btn layui-btn-sm" lay-event="insert">添加</button>
 		</div>
 	</script>
-	<script type="text/html" id="menuBar">
-		<a class="layui-btn layui-btn-xs" lay-event="menu">维护</a>
-	</script>
-	<script type="text/html" id="permissionBar">
-		<a class="layui-btn layui-btn-xs" lay-event="permission">授权</a>
-	</script>
-	<script type="text/html" id="userBar">
-		<a class="layui-btn layui-btn-xs" lay-event="user">查看</a>
-	</script>
 	<script type="text/html" id="fieldBar">
-		<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
 		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 	</script>
 
@@ -51,45 +42,42 @@
 	<script>
 		layui.use('table', function() {
 			var table = layui.table;
+			var $ = layui.$;
 			table.render({
 				id: 'data',
 				elem: '#data',
-				url: '/system/role/page',
+				url: '/system/role/users',
+				where:{
+					code: $("#code").val()
+				},
 				toolbar: '#toolbar',
 				method: 'post',
 				limits: [10, 20, 50, 100],
 				cols: [
 					[{
-						field: 'code',
-						title: '编码',
+						field: 'realName',
+						title: '姓名',
 						align: 'center',
 						sort: true
-					}, {
-						field: 'name',
-						title: '名称',
+					},{
+						field: 'typeName',
+						title: '类型',
+						align: 'center',
 						sort: true
-					}, {
-						title: '菜单',
-						toolbar: '#menuBar'
-					}, {
-						title: '权限',
-						toolbar: '#permissionBar'
-					}, {
-						title: '用户列表',
-						toolbar: '#userBar'
+					},{
+						field: 'statusName',
+						title: '状态',
+						align: 'center',
+						sort: true
 					}, {
 						field: 'createTime',
-						title: '创建时间',
-						align: 'center',
-						sort: true
-					}, {
-						field: 'updateTime',
 						title: '修改时间',
 						align: 'center',
 						sort: true
 					}, {
 						fixed: 'right',
-						title: '操作',
+						title: '删除',
+						align: 'center',
 						toolbar: '#fieldBar'
 					}]
 				],
@@ -109,21 +97,6 @@
 				},
 				page: true
 			});
-			//头工具栏事件
-			table.on('toolbar(data)', function(obj) {
-				var checkStatus = table.checkStatus(obj.config.id);
-				switch(obj.event) {
-					case 'insert':
-						layer.open({
-							type: 2,
-							title: "添加角色",
-							content: '/system/role/index/insert',
-							area: ['460px', '200px']
-						});
-						break;
-				};
-			});
-
 			//监听行工具事件
 			table.on('tool(data)', function(obj) {
 				var data = obj.data;
@@ -131,7 +104,7 @@
 					layer.confirm('确定要删除此角色吗？', function(index) {
 						$.ajax({
 							type: "GET",
-							url: "/system/role/del/"+data.code,
+							url: "/system/role/user/del",
 							dataType: "json",
 							data: {},
 							contentType: "application/json;charset=utf-8",
@@ -154,31 +127,6 @@
 							}
 						});
 					});
-				} else if(obj.event === 'edit') {
-					layer.open({
-						type: 2,
-						title: "编辑角色",
-						content: '/system/role/update/'+data.code,
-						area: ['460px', '200px']
-					});
-				} else if(obj.event == 'menu'){
-					var menu = layer.open({
-						type: 2,
-						title: "查看菜单列表",
-						content: '/system/role/menus/'+data.code,
-						area: ['700px', '600px']
-					});
-					layer.full(menu);
-				}else if(obj.event == 'user'){
-					var user = layer.open({
-						type: 2,
-						title: "查询用户列表",
-						content: '/system/role/users/'+data.code,
-						area: ['700px', '600px'],
-						btn:['关闭窗口'],
-						btnAlign:'r'
-					});
-					layer.full(user);
 				}
 			});
 			var $ = layui.$,
@@ -188,9 +136,7 @@
 						table.reload('data', {
 							where: {
 								code: $("#code").val(),
-								type: $("#type").val(),
-								status: $("#status").val(),
-								realName: $("#realName").val()
+								name: $("#name").val()
 							}
 						});
 					}

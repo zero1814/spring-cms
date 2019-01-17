@@ -24,7 +24,7 @@
 					  <div class="layui-upload-list">
 					    <img style="width:80px;height:80px;" class="layui-upload-img" id="user_header" th:attr="src=${user.extend.headerPic}">
 					    <p id="user_header_path"></p>
-					    <input type="hidden" name="headerPic" id="headerPic" th:attr="value=${user.extend.headerPic}">
+					    <input type="hidden" name="headerPic" id="headerPic" th:attr="value=${user.headerPic}">
 					  </div>
 					  <button type="button" class="layui-btn" id="upload_header">上传图像</button>
 					</div>   
@@ -33,7 +33,7 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">名称</label>
 				<div class="layui-input-inline">
-					<input disabled="disabled" th:attr="value=${user.extend.realName}" name="name" lay-verify="required" autocomplete="off" class="layui-input" type="text">
+					<input disabled="disabled" th:attr="value=${user.realName}" name="name" lay-verify="required" autocomplete="off" class="layui-input" type="text">
 				</div>
 			</div>
 			<div class="layui-form-item">
@@ -90,9 +90,7 @@
 				"phone": field.phone,
 				"email": field.email,
 				"status":field.status,
-				"extend":{
-					"headerPic":field.headerPic
-					}
+				"headerPic":field.headerPic
 			    }
          		$.ajax({
             		type: "POST",
