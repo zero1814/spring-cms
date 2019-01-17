@@ -80,6 +80,7 @@ public class CommonsController {
 		if (result.getCode() == ResultType.SUCCESS) {
 			// 将用户信息保存到session中
 			session.setAttribute("user", result.getEntity());
+			session.setAttribute("test", "test");
 			// 添加shiro验证
 			Subject subject = SecurityUtils.getSubject();
 			UsernamePasswordToken token = new UsernamePasswordToken();
