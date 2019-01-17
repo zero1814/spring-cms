@@ -24,7 +24,6 @@ public class ScMenuTest {
 	@Autowired
 	private IScMenuService service;
 
-	@Test
 	public void insert() {
 		String createUser = "insert";
 		String status = "1";
@@ -118,7 +117,7 @@ public class ScMenuTest {
 
 	@Test
 	public void navs() {
-		DataResult<ScMenu> result = service.navs();
+		DataResult<ScMenu> result = service.navs("SU1085362996009496576");
 		System.out.println(JSON.toJSON(result));
 	}
 }

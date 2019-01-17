@@ -27,7 +27,7 @@ public interface IScMenuService extends IBaseService<ScMenu, ScMenuDto> {
 	 * 
 	 * @return
 	 */
-	DataResult<ScMenu> navs();
+	DataResult<ScMenu> navs(String userCode);
 
 	/**
 	 * 

@@ -12,8 +12,12 @@ import org.mapper.system.ScSettingMapper;
 import org.service.system.IScMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.zero.spring.mybatis.BaseServiceImpl;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
 import zero.commons.basics.StringUtils;
 import zero.commons.basics.result.DataResult;
@@ -35,6 +39,9 @@ public class ScMenuServiceImpl extends BaseServiceImpl<ScMenu, ScMenuMapper, ScM
 	@Autowired
 	private ScSettingMapper settingMapper;
 
+	@Autowired
+	private RedisTemplate<String, String> template;
+
 	@Value("${system.menu.status}")
 	private String statusCode;
 
@@ -46,12 +53,22 @@ public class ScMenuServiceImpl extends BaseServiceImpl<ScMenu, ScMenuMapper, ScM
 	 * @see org.service.system.IScMenuService#navs()
 	 */
 	@Override
-	public DataResult<ScMenu> navs() {
+	public DataResult<ScMenu> navs(String userCode) {
 		DataResult<ScMenu> result = new DataResult<ScMenu>();
 		try {
-			List<ScMenu> list = mapper.navs("SS1077459485900926976");
+			String key = "menu_" + userCode;
+			boolean flag = template.hasKey(key);
+			List<ScMenu> list = null;
+			if (flag) {
+				String menus = template.opsForValue().get(key);
+				list = JSONObject.parseArray(menus, ScMenu.class);
+			} else {
+				list = mapper.navs(userCode);
+				template.opsForValue().set(key, JSONArray.toJSONString(list));
+			}
+			list = tree(list);
 			if (list != null && list.size() > 0) {
-				result.setData(tree(list));
+				result.setData(list);
 				result.setCode(ResultType.SUCCESS);
 				result.setMessage("加载成功");
 				return result;

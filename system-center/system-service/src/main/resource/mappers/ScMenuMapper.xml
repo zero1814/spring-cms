@@ -113,9 +113,19 @@
 	</update>
 	<select id="navs" resultMap="BaseResultMap"
 		parameterType="java.lang.String">
-		select
-		`code`,parent_code,name,link_url from sc_menu
-		where `status` = #{status,jdbcType=VARCHAR}
+		SELECT
+		m.`code`,
+		m.parent_code,
+		m.`name`,
+		m.link_url
+		FROM
+		sc_menu AS m
+		LEFT JOIN sc_role_menu AS rm ON m.`code` = rm.menu_code
+		LEFT JOIN sc_user_role AS ur ON rm.role_code = ur.role_code
+		<where>
+			m.`status` ='SS1077459485900926976'
+			AND ur.user_code = #{userCode,jdbcType=VARCHAR}
+		</where>
 	</select>
 	<select id="page" parameterType="org.dto.system.ScMenuDto"
 		resultMap="BaseResultMap">

@@ -1,7 +1,10 @@
 package cn.com.controller.system;
 
+import javax.servlet.http.HttpSession;
+
 import org.dto.system.ScMenuDto;
 import org.entity.system.ScMenu;
+import org.entity.system.ScUser;
 import org.service.system.IScMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,8 +34,9 @@ public class ScMenuController extends BaseController<ScMenu, ScMenuDto, IScMenuS
 	}
 
 	@GetMapping("navs")
-	public DataResult<ScMenu> navs() {
-		return service.navs();
+	public DataResult<ScMenu> navs(HttpSession session) {
+		ScUser user = (ScUser) session.getAttribute("user");
+		return service.navs(user.getCode());
 	}
 
 	@GetMapping("index/insert")
