@@ -12,4 +12,5 @@ import org.zero.spring.mybatis.IBaseService;
  * 时间: 2018年12月21日 下午1:25:27
  */
 public interface IScRoleMenuService extends IBaseService<ScRoleMenu, ScRoleMenuDto> {
+
 }

@@ -51,6 +51,9 @@
 			<button class="layui-btn layui-btn-sm" lay-event="insert">添加</button>
 		</div>
 	</script>
+	<script type="text/html" id="roleBar">
+		<a class="layui-btn layui-btn-xs" lay-event="role">授权</a>
+	</script>
 	<script type="text/html" id="fieldBar">
 		<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
 		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
@@ -108,7 +111,12 @@
 						title: '修改时间',
 						align: 'center',
 						sort: true
-					}, {
+					},{
+						field: 'role',
+						title: '角色',
+						align: 'center',
+						templet:'#roleBar'
+					},  {
 						fixed: 'right',
 						title: '操作',
 						toolbar: '#fieldBar'
@@ -180,6 +188,8 @@
 						content: '/system/user/update/'+user.code,
 						area: ['460px', '550px']
 					});
+				}else if(obj.event === 'role'){
+					layer.alert('开始添加角色');
 				}
 			});
 			var $ = layui.$,

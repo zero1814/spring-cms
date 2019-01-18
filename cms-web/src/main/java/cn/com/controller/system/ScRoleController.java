@@ -1,10 +1,10 @@
 package cn.com.controller.system;
 
 import org.dto.system.ScRoleDto;
-import org.entity.system.ScMenu;
 import org.entity.system.ScRole;
 import org.entity.system.ScUser;
 import org.service.system.IScRoleService;
+import org.service.system.IScUserRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,8 +16,8 @@ import org.springframework.web.servlet.ModelAndView;
 import cn.com.controller.BaseController;
 import zero.commons.basics.helper.CodeHelper;
 import zero.commons.basics.result.EntityResult;
-import zero.commons.basics.result.PageResult;
 import zero.commons.basics.result.ResultType;
+import zero.commons.basics.result.TransferResult;
 
 @RestController
 @RequestMapping("/system/role/")
@@ -25,6 +25,8 @@ public class ScRoleController extends BaseController<ScRole, ScRoleDto, IScRoleS
 
 	@Autowired
 	private IScRoleService service;
+	@Autowired
+	private IScUserRoleService urService;
 
 	@RequestMapping("index")
 	public ModelAndView index() {
@@ -54,29 +56,34 @@ public class ScRoleController extends BaseController<ScRole, ScRoleDto, IScRoleS
 		}
 		return view;
 	}
-	
-	
-	@GetMapping("users/{code}")
-	public ModelAndView roleUsersIndex(@PathVariable("code") String code) {
-		ModelAndView view =  new ModelAndView("system/role/user");
-		view.addObject("code", code);
+
+	/**
+	 * 
+	 * 方法: transferUsersIndex <br>
+	 * 描述: 查看选择当前角色包含用户页面 <br>
+	 * 作者: zhy<br>
+	 * 时间: 2019年1月18日 下午3:54:29
+	 * @param roleCode
+	 * @return
+	 */
+	@GetMapping("user/{roleCode}")
+	public ModelAndView usersIndex(@PathVariable("roleCode") String roleCode) {
+		ModelAndView view = new ModelAndView("system/role/user");
+		view.addObject("code", roleCode);
 		return view;
 	}
-	
-	@PostMapping("users")
-	public PageResult<ScUser> roleUsers(ScRoleDto dto){
-		return service.roleUsers(dto);
-	}
-	
-	@GetMapping("menus/{code}")
-	public ModelAndView roleMenusIndex(@PathVariable("code") String code) {
-		ModelAndView view =  new ModelAndView("system/role/menu");
-		view.addObject("code", code);
-		return view;
-	}
-	
-	@PostMapping("menus")
-	public PageResult<ScMenu> rolemenus(ScRoleDto dto){
-		return service.roleMenus(dto);
+
+	/**
+	 * 
+	 * 方法: transferUsers <br>
+	 * 描述: 查看选择当前角色包含用户的数据集 <br>
+	 * 作者: zhy<br>
+	 * 时间: 2019年1月18日 下午3:55:07
+	 * @param roleCode
+	 * @return
+	 */
+	@PostMapping("user/data/{roleCode}")
+	public TransferResult<ScUser> users(@PathVariable("roleCode") String roleCode) {
+		return urService.roleUsers(roleCode);
 	}
 }

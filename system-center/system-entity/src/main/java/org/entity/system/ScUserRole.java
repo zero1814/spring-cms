@@ -18,10 +18,30 @@ public class ScUserRole extends BaseEntity {
 	 */
 	private String userCode;
 
+	private ScUser user;
+
 	/**
 	 * 角色编码
 	 */
 	private String roleCode;
+
+	private ScRole role;
+
+	public ScUser getUser() {
+		return user;
+	}
+
+	public void setUser(ScUser user) {
+		this.user = user;
+	}
+
+	public ScRole getRole() {
+		return role;
+	}
+
+	public void setRole(ScRole role) {
+		this.role = role;
+	}
 
 	public String getUserCode() {
 		return userCode;

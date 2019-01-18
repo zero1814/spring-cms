@@ -11,17 +11,17 @@
 		<meta name="format-detection" content="telephone=no">
 		<link rel="stylesheet" th:href="@{/plugins/font-awesome/4.7.0/css/font-awesome.min.css}" media="all" />
 		<link rel="stylesheet" th:href="@{/plugins/layui/2.4.5/css/layui.css}" media="all" />
-		<link rel="stylesheet" th:href="@{/plugins/layui/transfer/css/cyType.css}" />
-		<link rel="stylesheet" th:href="@{/plugins/layui/transfer/css/cyStyle.css}" />
+		<link rel="stylesheet" th:href="assets/plugins/layui/transfer/css/cyType.css" />
+		<link rel="stylesheet" th:href="assets/plugins/layui/transfer/css/cyStyle.css" />
 	</head>
 
 	<body class="childrenBody">
 		<input type="hidden" id="code" name="code" th:attr="value=${code}"/>
 		<div class="layui-input-normal layui-form" >
-			<div cyType="transferTool"  cyProps="url:'/system/role/user/data/#{code}'" name="province[]" value=""></div>
+			<div cyType="transferTool" cyProps="url:'/system/role/user/{code}'" name="province[]" value=""></div>
 		</div>
 	</body>
 	<script th:src="@{/plugins/layui/2.4.5/layui.js}"></script>
-	<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
-	<script th:src="@{/plugins/layui/transfer/transferTool.js}"></script>
+	<script th:src="assets/js/jquery-3.3.1.min.js"></script>
+	<script th:src="assets/plugins/layui/transfer/transferTool.js"></script>
 </html>

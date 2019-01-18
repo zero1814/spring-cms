@@ -13,6 +13,16 @@
 			jdbcType="VARCHAR" />
 		<result column="create_time" property="createTime"
 			jdbcType="VARCHAR" />
+		<collection property="role"
+			javaType="org.entity.system.ScRole">
+			<result column="role_code" property="code" jdbcType="VARCHAR" />
+			<result column="role_name" property="name" jdbcType="VARCHAR" />
+		</collection>
+		<collection property="user"
+			javaType="org.entity.system.ScUser">
+			<result column="user_code" property="code" jdbcType="VARCHAR" />
+			<result column="user_name" property="name" jdbcType="VARCHAR" />
+		</collection>
 	</resultMap>
 	<sql id="Base_Column_List">
 		id, uid, user_code, role_code, create_user, create_time
@@ -54,4 +64,74 @@
 			STR_TO_DATE(#{createTime,jdbcType=VARCHAR},'%Y-%m-%d %H:%i:%s'),
 		</trim>
 	</insert>
+	<!-- 根据用户编码查询角色列表 -->
+	<select id="selectUserRoles"
+		resultType="org.entity.system.ScRole">
+		SELECT
+		r.`code`,
+		r.`name`
+		FROM
+		sc_role AS r
+		LEFT JOIN sc_user_role AS ur
+		ON
+		r.`code` = ur.role_code
+		<where>
+			ur.user_code = #{userCode,jdbcType=VARCHAR}
+		</where>
+	</select>
+	<!-- 根据用户编码查询没有此用户的角色列表 -->
+	<select id="selectUserNotRoles"
+		resultType="org.entity.system.ScRole">
+		SELECT
+		`code`,
+		`name`
+		FROM
+		sc_role
+		<where>
+			`code` NOT IN (
+			SELECT
+			role_code
+			FROM
+			sc_user_role
+			<where>
+				user_code = #{userCode,jdbcType=VARCHAR}
+			</where>
+			)
+		</where>
+	</select>
+
+	<!-- 根据角色编码查询用户列表 -->
+	<select id="selectRoleUsers"
+		resultType="org.entity.system.ScUser" parameterType="java.lang.String">
+		SELECT
+		u.`code`,
+		u.real_name
+		FROM
+		sc_user AS u
+		LEFT JOIN sc_user_role AS ur
+		ON u.`code` = ur.user_code
+		<where>
+			ur.role_code = #{roleCode,jdbcType=VARCHAR}
+		</where>
+	</select>
+	<!-- 根据角色编码查询没有此角色的用户列表 -->
+	<select id="selectRoleNotUsers"
+		resultType="org.entity.system.ScUser" parameterType="java.lang.String">
+		SELECT
+		`code`,
+		real_name
+		FROM
+		sc_user
+		<where>
+			`code` NOT IN (
+			SELECT
+			user_code
+			FROM
+			sc_user_role
+			<where>
+				role_code = #{roleCode,jdbcType=VARCHAR}
+			</where>
+			)
+		</where>
+	</select>
 </mapper>

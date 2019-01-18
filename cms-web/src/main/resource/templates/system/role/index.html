@@ -168,17 +168,15 @@
 						content: '/system/role/menus/'+data.code,
 						area: ['700px', '600px']
 					});
-					layer.full(menu);
 				}else if(obj.event == 'user'){
 					var user = layer.open({
 						type: 2,
 						title: "查询用户列表",
-						content: '/system/role/users/'+data.code,
-						area: ['700px', '600px'],
+						content: '/system/role/user/'+data.code,
+						area: ['600px', '500px'],
 						btn:['关闭窗口'],
 						btnAlign:'r'
 					});
-					layer.full(user);
 				}
 			});
 			var $ = layui.$,
